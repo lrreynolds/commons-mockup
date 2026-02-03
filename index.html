@@ -500,6 +500,15 @@
   .topbar .chip{ padding: 8px 10px; font-size: 12px; }
   .proofLine{ max-width: 100%; }
 }
+
+#sInvite .card, #sPosting .card{
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+
+#sInvite .card:hover, #sPosting .card:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0,0,0,.06);
+}
   </style>
 </head>
 <body>
@@ -537,7 +546,6 @@
 
     <main class="stage">
 
-<!-- #1 Landing -->
 <!-- #1 Landing -->
 <section id="s1">
   <div class="topbar">
@@ -980,6 +988,101 @@
         </div>
       </section>
 
+ <!-- #6a Invite -->
+      <section id="sInvite">
+  <div class="content">
+    <h2>Invite your audience</h2>
+    <p class="muted">
+      Commons makes it easy to bring your existing audience into your community.
+    </p>
+
+    <div class="grid" style="grid-template-columns:1fr 1fr; gap:14px; margin-top:14px;">
+
+      <!-- Substack -->
+      <div class="card">
+        <h3>Substack creators</h3>
+        <div class="list">
+          <div class="item">
+            <b>Email invite template</b>
+            <div class="muted">Send a quick announcement to subscribers</div>
+          </div>
+          <div class="item">
+            <b>Post footer link</b>
+            <div class="muted">Add a “Join the discussion on Commons” link</div>
+          </div>
+          <div class="item">
+            <b>Shareable community link</b>
+            <div class="muted">Use anywhere you already communicate</div>
+          </div>
+        </div>
+        <button class="ghostBtn" style="margin-top:10px;">Copy templates</button>
+      </div>
+
+      <!-- YouTube -->
+      <div class="card">
+        <h3>YouTube creators</h3>
+        <div class="list">
+          <div class="item">
+            <b>Video description snippet</b>
+            <div class="muted">Invite viewers to join your Commons community</div>
+          </div>
+          <div class="item">
+            <b>Pinned comment text</b>
+            <div class="muted">Keep the invite visible under each video</div>
+          </div>
+          <div class="item">
+            <b>Shareable community link</b>
+            <div class="muted">Perfect for social bios</div>
+          </div>
+        </div>
+        <button class="ghostBtn" style="margin-top:10px;">Copy templates</button>
+      </div>
+
+    </div>
+
+    <div class="note" style="margin-top:14px;">
+      Most creators see their first members join within hours of sharing.
+    </div>
+  </div>
+</section>
+
+<section id="sPosting">
+  <div class="content">
+    <h2>Post once. Reach your community — and beyond.</h2>
+    <p class="muted">
+      Commons is built on Mastodon, so every post lives in your community and travels across the wider fediverse.
+    </p>
+
+    <div class="grid" style="grid-template-columns:1fr 1fr 1fr; gap:12px; margin-top:16px;">
+
+      <div class="card">
+        <h3>Write in Commons</h3>
+        <p class="muted">
+          Use the simple built-in composer or your favorite posting tools.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>Appears in your community</h3>
+        <p class="muted">
+          Members see posts in a calm, chronological feed.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>Discovered across Mastodon</h3>
+        <p class="muted">
+          Followers on other servers and hashtags can find and engage.
+        </p>
+      </div>
+
+    </div>
+
+    <div class="note" style="margin-top:14px;">
+      No extra posting work. No algorithms deciding what gets seen.
+    </div>
+  </div>
+</section>
       <!-- #7 Creator dashboard -->
       <section id="s7" class="hidden">
         <div class="topbar">
