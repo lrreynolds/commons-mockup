@@ -448,6 +448,28 @@
       .stage{min-height:680px}
       .hero .bullets{grid-template-columns:1fr}
     }
+
+    /* --- Landing responsiveness helpers --- */
+.heroGrid{
+  grid-template-columns: 1fr 360px;
+  align-items: start;
+  max-width: 980px;
+}
+
+/* Make funding tiles auto-wrap cleanly */
+.fundingGrid{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 10px;
+}
+
+/* Mobile: stack the hero */
+@media (max-width: 920px){
+  .heroGrid{
+    grid-template-columns: 1fr;
+    max-width: 740px;
+  }
+}
   </style>
 </head>
 <body>
@@ -486,6 +508,7 @@
     <main class="stage">
 
 <!-- #1 Landing -->
+<!-- #1 Landing -->
 <section id="s1">
   <div class="topbar">
     <div class="left">
@@ -499,12 +522,12 @@
   </div>
 
   <div class="content hero">
-    <div class="grid" style="grid-template-columns: 1fr 360px; align-items:start; max-width:980px;">
+    <div class="grid heroGrid">
       <!-- Left: core message -->
       <div>
         <h1 style="margin-bottom:8px;">Create your own Twitter-style community.</h1>
 
-        <p style="font-size:16px; font-weight:800; margin:0;">
+        <p style="font-size:16px; font-weight:900; margin:0;">
           The sane social media experience:
           <span style="white-space:nowrap;">No Ads.</span>
           <span style="white-space:nowrap;">No Algorithms.</span>
@@ -512,7 +535,11 @@
           <span style="white-space:nowrap;">Built-in funding tools.</span>
         </p>
 
-        <p style="margin-top:12px;">
+        <p style="margin:10px 0 0; font-weight:800;">
+          No tech skills required — launch your community in minutes.
+        </p>
+
+        <p style="margin-top:10px;">
           Short posts, replies, images, video, and real conversation — in a chronological feed your community controls.
           <b>Only what people choose to follow.</b>
         </p>
@@ -525,12 +552,12 @@
         <div class="bullets" style="margin-top:16px;">
           <div class="bullet"><b>Chronological feed</b><br/>Posts appear in time order — no engagement ranking.</div>
           <div class="bullet"><b>Only what you follow</b><br/>People, lists, and hashtags you choose — nothing injected.</div>
-          <div class="bullet"><b>Ad-free by design</b><br/>No sponsored content or attention selling.</div>
+          <div class="bullet"><b>Ad-free and uncluttered</b><br/>No sponsored content or attention selling.</div>
           <div class="bullet"><b>Predictable experience</b><br/>What you see today works the same tomorrow.</div>
         </div>
       </div>
 
-      <!-- Right: mini feed visual (anchors “twitter-style”) -->
+      <!-- Right: mini feed visual -->
       <div class="card" style="padding:12px;">
         <h3 style="margin-bottom:6px;">What it feels like</h3>
         <div class="muted">A simple feed for conversation.</div>
@@ -569,11 +596,11 @@
       </div>
     </div>
 
-    <!-- Funding tools (cleaner, less “stacked boxes”) -->
+    <!-- Funding tools -->
     <div class="card" style="margin-top:18px;">
       <div class="row" style="align-items:flex-start; gap:14px;">
         <div style="flex:1;">
-          <h3 style="margin-bottom:6px;">Built-in community funding tools</h3>
+          <h3 style="margin-bottom:6px;">Simple ways your audience can fund your work</h3>
           <div class="muted">
             Included with every community. Turn them on when you’re ready — and choose how you use them.
           </div>
@@ -581,7 +608,7 @@
         <div class="chip" style="height:fit-content;">Included</div>
       </div>
 
-      <div style="margin-top:12px; display:grid; grid-template-columns: 1fr 1fr 1fr; gap:10px;">
+      <div class="fundingGrid" style="margin-top:12px;">
         <div class="item" style="background: var(--card2);">
           <b>Supporter memberships</b>
           <div class="muted" style="margin-top:4px;">Monthly support tiers to help sustain your community</div>
