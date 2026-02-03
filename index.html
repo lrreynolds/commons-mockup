@@ -470,6 +470,36 @@
     max-width: 740px;
   }
 }
+
+/* --- Design polish patch (landing) --- */
+.topbar .chip{
+  font-weight: 800;
+  padding: 10px 12px;
+  border-radius: 999px;
+  letter-spacing: 0.2px;
+}
+
+.hero h1{
+  line-height: 1.05;
+  letter-spacing: -0.2px;
+}
+
+.hero p{
+  margin-block: 8px;
+}
+
+.proofLine{
+  margin-top: 10px;
+  max-width: 58ch;
+}
+
+.bullets{ gap: 10px; }
+.bullet{ padding: 12px; border-radius: 14px; }
+
+@media (max-width: 920px){
+  .topbar .chip{ padding: 8px 10px; font-size: 12px; }
+  .proofLine{ max-width: 100%; }
+}
   </style>
 </head>
 <body>
@@ -485,7 +515,7 @@
 
       <div class="nav" id="nav">
         <button data-screen="s1" class="active">Landing page <small>#1</small><span>→</span></button>
-        <button data-screen="s2">Start trial / account <small>#2</small><span>→</span></button>
+        <button data-screen="s2">Setup: create account <small>#2</small><span>→</span></button>
         <button data-screen="s3">Setup: choose plan <small>#3</small><span>→</span></button>
         <button data-screen="s4">Setup: name + domain <small>#4</small><span>→</span></button>
         <button data-screen="s5">Setup: branding <small>#5</small><span>→</span></button>
@@ -553,11 +583,14 @@
           <button class="ghostBtn" data-jump="s7">See a sample dashboard</button>
         </div>
 
+        <div class="muted proofLine">
+  Built on proven open-source social tech. Works with existing Mastodon apps and cross-posting tools.
+</div>
+
         <div class="bullets" style="margin-top:16px;">
           <div class="bullet"><b>Chronological feed</b><br/>Posts appear in time order — no engagement ranking.</div>
           <div class="bullet"><b>Only what you follow</b><br/>People, lists, and hashtags you choose — nothing injected.</div>
           <div class="bullet"><b>Ad-free and uncluttered</b><br/>No sponsored content or attention selling.</div>
-          <div class="bullet"><b>Predictable experience</b><br/>What you see today works the same tomorrow.</div>
         </div>
       </div>
 
@@ -606,25 +639,25 @@
         <div style="flex:1;">
           <h3 style="margin-bottom:6px;">Simple ways your audience can fund your work</h3>
           <div class="muted">
-            Included with every community. Turn them on when you’re ready — and choose how you use them.
+            Basic funding is included. Turn it on when you’re ready — and upgrade to Growth for fundraising goals.
           </div>
         </div>
-        <div class="chip" style="height:fit-content;">Included</div>
+      
       </div>
 
       <div class="fundingGrid" style="margin-top:12px;">
-        <div class="item" style="background: var(--card2);">
-          <b>Supporter memberships</b>
-          <div class="muted" style="margin-top:4px;">Monthly support tiers to help sustain your community</div>
-        </div>
-        <div class="item" style="background: var(--card2);">
-          <b>One-time tips</b>
-          <div class="muted" style="margin-top:4px;">Quick “thank you” contributions when people want to help</div>
-        </div>
-        <div class="item" style="background: var(--card2);">
-          <b>Fundraising goals</b>
-          <div class="muted" style="margin-top:4px;">Raise funds for projects or causes — transparently</div>
-        </div>
+       <div class="item" style="background: var(--card2);">
+  <b>Supporter memberships</b>
+  <div class="muted" style="margin-top:4px;">Available on Starter Plan — Monthly support tiers to help sustain your community</div>
+</div>
+<div class="item" style="background: var(--card2);">
+  <b>One-time tips</b>
+  <div class="muted" style="margin-top:4px;">Available on Starter Plan — Quick “thank you” contributions when people want to help</div>
+</div>
+<div class="item" style="background: var(--card2);">
+  <b>Fundraising goals</b>
+  <div class="muted" style="margin-top:4px;">Available on Growth Plan — raise funds for projects or causes transparently</div>
+</div>
       </div>
 
 <div class="card" style="margin-top:20px;">
@@ -662,14 +695,14 @@
 </div>
 </section>
 
-      <!-- #2 Start Trial / Account -->
+      <!-- #2 Start Create Account -->
       <section id="s2" class="hidden">
         <div class="topbar">
           <div class="left">
             <div class="logoMark"></div>
             <div class="meta">
-              <b>Create your creator account</b>
-              <span>Start a free trial and launch your community</span>
+              <b>Create your account</b>
+              <span>Launch your community</span>
             </div>
           </div>
           <div class="chip">Step 1 of 4</div>
@@ -679,10 +712,10 @@
           <div class="center">
             <div class="header">
               <div>
-                <h2>Start your free trial</h2>
+                <h2>Create Owner Account</h2>
                 <p>Two minutes to set up. You can change details later.</p>
               </div>
-              <div class="chip">No credit card (mock)</div>
+              <div class="chip">Simple monthly pricing. Cancel anytime.</div>
             </div>
 
             <div class="progress">
@@ -743,32 +776,51 @@
               <span>Setup</span>
             </div>
 
-            <div class="grid" style="margin-top:12px;">
-              <div class="card">
-                <h3>Creator Plan</h3>
-                <div class="muted">$29/mo after trial (example)</div>
-                <div class="pillRow">
-                  <div class="pillTag">Unlimited members</div>
-                  <div class="pillTag">Multiple creators/admins</div>
-                  <div class="pillTag">Optional supporter extras</div>
-                  <div class="pillTag">Backups + monitoring</div>
-                  <div class="pillTag">1,000 character posts</div>
-                </div>
-                <div class="note" style="margin-top:12px;">
-                  <b>Designed for busy creators:</b> Share links + spark discussion. No algorithms. No tech setup.
-                </div>
-              </div>
+            <div class="grid" style="grid-template-columns: 1fr 1fr; gap:12px;">
+  <div class="card">
+    <h3>Starter</h3>
+    <div class="muted">For launching your community</div>
+    <div style="font-size:26px; font-weight:900; margin-top:8px;">$15<span class="muted" style="font-size:14px; font-weight:700;">/mo</span></div>
 
-              <div class="card">
-                <h3>Billing (later)</h3>
-                <div class="muted">For MVP mock, we skip payment collection here.</div>
-                <div class="list">
-                  <div class="item"><b>Trial</b><div class="muted">14 days free</div></div>
-                  <div class="item"><b>Cancel anytime</b><div class="muted">No lock-in</div></div>
-                  <div class="item"><b>Supporters</b><div class="muted">Optional, additive</div></div>
-                </div>
-              </div>
-            </div>
+    <div class="list" style="margin-top:12px;">
+      <div class="item"><b>Hosted community</b><div class="muted">Mastodon-based, managed for you</div></div>
+      <div class="item"><b>Basic funding</b><div class="muted">Supporter memberships + one-time tips</div></div>
+      <div class="item"><b>Commons address</b><div class="muted">Use a Commons subdomain to start</div></div>
+      <div class="item"><b>Standard support</b><div class="muted">Email support, typically within 48 hours</div></div>
+      <div class="item"><b>1,000 character posts</b><div class="muted">A little extra room by default</div></div>
+      <div class="item"><b>Backups + monitoring</b><div class="muted">Included</div></div>
+    </div>
+
+    <div class="note" style="margin-top:12px;">
+      Best for busy creators who want a calm, sane community without tech overhead.
+    </div>
+  </div>
+
+  <div class="card" style="border:2px solid rgba(14, 116, 144, .25);">
+    <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
+      <h3 style="margin:0;">Growth</h3>
+      <div class="chip">Most creators</div>
+    </div>
+    <div class="muted">For more active communities</div>
+    <div style="font-size:26px; font-weight:900; margin-top:8px;">$29<span class="muted" style="font-size:14px; font-weight:700;">/mo</span></div>
+
+    <div class="list" style="margin-top:12px;">
+      <div class="item"><b>Everything in Starter</b><div class="muted">Plus the upgrades below</div></div>
+      <div class="item"><b>Custom domain</b><div class="muted">Use your own community address</div></div>
+      <div class="item"><b>Fundraising goals</b><div class="muted">Goal-based campaigns with progress tracking</div></div>
+      <div class="item"><b>Priority support</b><div class="muted">Email support, typically within 24 hours</div></div>
+      <div class="item"><b>More media capacity</b><div class="muted">Higher storage & throughput</div></div>
+    </div>
+
+    <div class="note" style="margin-top:12px;">
+      Best once your community is active and you want goal-oriented fundraising.
+    </div>
+  </div>
+</div>
+
+<div class="note" style="margin-top:12px;">
+  <b>Simple billing:</b> pay monthly, cancel anytime.
+</div>
 
             <div class="footerBar">
               <button class="secondary" data-jump="s2">Back</button>
@@ -822,7 +874,7 @@
                 <label>Community address</label>
                 <select>
                   <option selected>ukrainenews.commons.social (recommended)</option>
-                  <option>Use my custom domain (connect later)</option>
+                  <option>Use my custom domain (Growth Plan - connect later)</option>
                 </select>
                 <div class="muted" style="margin-top:8px;">
                   Tip: start with a Commons address now. Custom domain can be added later without disrupting members.
