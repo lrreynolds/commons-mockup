@@ -509,10 +509,81 @@
   transform: translateY(-2px);
   box-shadow: 0 8px 20px rgba(0,0,0,.06);
 }
+
+/* --- Sidebar collapse (make landing less overwhelming) --- */
+
+/* Start with sidebar collapsed (we'll set body.navCollapsed via JS) */
+body.navCollapsed .sidebar{
+  transform: translateX(-110%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* When collapsed, let stage take full width */
+body.navCollapsed .wrap{
+  grid-template-columns: 1fr;
+}
+
+/* Smooth */
+.sidebar, .wrap{
+  transition: transform .2s ease, opacity .2s ease, grid-template-columns .2s ease;
+}
+
+/* Toggle button */
+.navToggle{
+  position: fixed;
+  top: 14px;
+  left: 14px;
+  z-index: 250;
+  border-radius: 999px;
+  padding: 10px 12px;
+  font-weight: 900;
+  width: auto;           /* override ghostBtn's 100% width */
+  box-shadow: 0 10px 24px rgba(0,0,0,.06);
+}
+
+/* When sidebar is open on desktop, push toggle to the right */
+body:not(.navCollapsed) .navToggle{
+  left: calc(16px + 320px + 16px); /* wrap padding + sidebar + gap */
+}
+
+/* Mobile/tablet: make sidebar an overlay drawer when opened */
+@media (max-width: 1020px){
+  body.navCollapsed .wrap{
+    grid-template-columns: 1fr; /* already true, keep explicit */
+  }
+
+  .sidebar{
+    position: fixed;
+    top: 14px;
+    left: 14px;
+    width: min(86vw, 340px);
+    max-height: calc(100vh - 28px);
+    overflow: auto;
+    z-index: 240;
+  }
+
+  body.navCollapsed .sidebar{
+    transform: translateX(-120%);
+  }
+
+  body:not(.navCollapsed) .navToggle{
+    left: calc(14px + min(86vw, 340px) + 12px);
+  }
+}
+
+.sidebar{
+  background: rgba(255,255,255,.62); /* was .7 */
+  box-shadow: 0 12px 34px rgba(16,32,24,.10); /* slightly softer */
+}
+.nav button{
+  background: rgba(255,255,255,.75); /* was .85 */
+}
   </style>
 </head>
 <body>
   <div class="wrap">
+    <button class="ghostBtn navToggle" id="navToggleBtn" type="button">Storyboard</button>
     <aside class="sidebar">
       <div class="brand">
         <div class="dot"></div>
@@ -1070,7 +1141,7 @@
       </div>
 
       <div class="card">
-        <h3>Discovered across Mastodon</h3>
+        <h3>Discovered across the wider Fediverse</h3>
         <p class="muted">
           Followers on other servers and hashtags can find and engage.
         </p>
@@ -1480,25 +1551,67 @@ New post is up. Two questions for readers:
     </main>
   </div>
 
-  <script>
-    const navButtons = Array.from(document.querySelectorAll("#nav button"));
-    const jumpers = Array.from(document.querySelectorAll("[data-jump]"));
-    const screenIds = navButtons.map(b => b.dataset.screen);
-    const screens = screenIds.reduce((acc,id)=> (acc[id]=document.getElementById(id), acc), {});
+ <script>
+  // --- Sidebar starts collapsed for a clean first impression ---
+  document.body.classList.add("navCollapsed");
 
-    function show(id){
-      Object.values(screens).forEach(el => el.classList.add("hidden"));
-      if(!screens[id]) id = "s1";
-      screens[id].classList.remove("hidden");
-      navButtons.forEach(b => b.classList.toggle("active", b.dataset.screen === id));
-      history.replaceState(null, "", "#" + id);
-    }
+  const btn = document.getElementById("navToggleBtn");
+  const nav = document.getElementById("nav");
 
-    navButtons.forEach(b => b.addEventListener("click", () => show(b.dataset.screen)));
-    jumpers.forEach(j => j.addEventListener("click", () => show(j.dataset.jump)));
+  const navButtons = Array.from(document.querySelectorAll("#nav button"));
+  const jumpers = Array.from(document.querySelectorAll("[data-jump]"));
+  const screenIds = navButtons.map(b => b.dataset.screen);
+  const screens = screenIds.reduce((acc, id) => (acc[id] = document.getElementById(id), acc), {});
 
-    const hash = (location.hash || "#s1").slice(1);
-    show(hash);
-  </script>
+  function setExpanded(isOpen){
+    if (!btn) return;
+    btn.setAttribute("aria-expanded", String(isOpen));
+    btn.textContent = isOpen ? "Close" : "Storyboard";
+  }
+  setExpanded(false);
+
+  function show(id){
+    // Hide all screens
+    Object.values(screens).forEach(el => el && el.classList.add("hidden"));
+
+    // Fallback
+    if (!screens[id]) id = "s1";
+
+    // Show requested screen
+    screens[id].classList.remove("hidden");
+
+    // Update nav active state
+    navButtons.forEach(b => b.classList.toggle("active", b.dataset.screen === id));
+
+    // Update URL hash without scroll jump
+    history.replaceState(null, "", "#" + id);
+  }
+
+  // Nav click -> show screen + collapse sidebar (better for demos)
+  navButtons.forEach(b => b.addEventListener("click", () => {
+    show(b.dataset.screen);
+    document.body.classList.add("navCollapsed");
+    setExpanded(false);
+  }));
+
+  // In-page jump buttons -> show screen (do NOT auto-collapse; your call)
+ jumpers.forEach(j => j.addEventListener("click", () => {
+  show(j.dataset.jump);
+  document.body.classList.add("navCollapsed");
+  setExpanded(false);
+}));
+
+  // Toggle sidebar open/closed
+  if (btn){
+    btn.addEventListener("click", () => {
+      const isCollapsed = document.body.classList.toggle("navCollapsed");
+      setExpanded(!isCollapsed);
+    });
+  }
+
+  // Load initial screen from hash
+  const hash = (location.hash || "#s1").slice(1);
+  show(hash);
+</script>
 </body>
 </html>
