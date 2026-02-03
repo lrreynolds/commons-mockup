@@ -1560,8 +1560,9 @@ New post is up. Two questions for readers:
 
   const navButtons = Array.from(document.querySelectorAll("#nav button"));
   const jumpers = Array.from(document.querySelectorAll("[data-jump]"));
-  const screenIds = navButtons.map(b => b.dataset.screen);
-  const screens = screenIds.reduce((acc, id) => (acc[id] = document.getElementById(id), acc), {});
+ // Treat every section inside the stage as a screen
+const stageScreens = Array.from(document.querySelectorAll(".stage section[id]"));
+const screens = stageScreens.reduce((acc, el) => (acc[el.id] = el, acc), {});
 
   function setExpanded(isOpen){
     if (!btn) return;
@@ -1572,7 +1573,7 @@ New post is up. Two questions for readers:
 
   function show(id){
     // Hide all screens
-    Object.values(screens).forEach(el => el && el.classList.add("hidden"));
+    stageScreens.forEach(el => el.classList.add("hidden"));
 
     // Fallback
     if (!screens[id]) id = "s1";
