@@ -557,6 +557,21 @@ body.navCollapsed .wrap{
   box-shadow: 0 10px 24px rgba(0,0,0,.06);
 }
 
+/* Mobile: keep toggle out of the content flow */
+
+  @media (max-width: 1020px){
+  .navToggle{
+    backdrop-filter: blur(8px);
+    background: rgba(255,255,255,.85);
+  }
+}
+
+  /* Add breathing room so it doesn’t overlap the topbar */
+  .stage{
+    padding-top: 56px;
+  }
+}
+
 /* When sidebar is open on desktop, push toggle to the right */
 body:not(.navCollapsed) .navToggle{
   left: calc(16px + 320px + 16px); /* wrap padding + sidebar + gap */
@@ -1568,21 +1583,21 @@ New post is up. Two questions for readers:
   </div>
 
 <script>
-  // --- Make scrolling predictable ---
+  // Prevent browser from restoring scroll positions on back/forward
   if ("scrollRestoration" in history) history.scrollRestoration = "manual";
 
-  // --- Sidebar starts collapsed for a clean first impression ---
+  // Start collapsed for a clean first impression
   document.body.classList.add("navCollapsed");
 
   const btn = document.getElementById("navToggleBtn");
   const stageEl = document.querySelector(".stage");
 
-  const navButtons = Array.from(document.querySelectorAll("#nav button"));
+  const navButtons = Array.from(document.querySelectorAll("#nav button[data-screen]"));
   const jumpers = Array.from(document.querySelectorAll("[data-jump]"));
 
-  // Treat every section inside the stage as a screen
+  // Every section inside .stage is a "screen"
   const stageScreens = Array.from(document.querySelectorAll(".stage section[id]"));
-  const screens = stageScreens.reduce((acc, el) => (acc[el.id] = el, acc), {});
+  const screens = Object.fromEntries(stageScreens.map(el => [el.id, el]));
 
   function setExpanded(isOpen){
     if (!btn) return;
@@ -1590,79 +1605,83 @@ New post is up. Two questions for readers:
     btn.textContent = isOpen ? "Close" : "Storyboard";
   }
 
-  function snapTop(){
-    // After any layout changes, snap the stage scroll back to top (twice = robust)
+  function setActiveNav(id){
+    navButtons.forEach(b => b.classList.toggle("active", b.dataset.screen === id));
+  }
+
+  function scrollTopNow(){
+    // Scroll both: stage (if it's a scroll container) and window (if page scroll exists)
+    if (stageEl) stageEl.scrollTop = 0;
+    window.scrollTo(0, 0);
+  }
+
+  function scrollTopAfterLayout(){
+    // One rAF is usually enough; two makes it rock-solid after class toggles/layout changes
     requestAnimationFrame(() => {
-      if (stageEl) stageEl.scrollTop = 0;
-      requestAnimationFrame(() => {
-        if (stageEl) stageEl.scrollTop = 0;
-      });
+      scrollTopNow();
+      requestAnimationFrame(scrollTopNow);
     });
   }
 
-  function show(id){
-    // Hide all
-    stageScreens.forEach(el => el.classList.add("hidden"));
-
-    // Default
+  function show(id, { updateHash = true } = {}){
     if (!screens[id]) id = "s1";
 
-    // Show one
+    // Hide all, show one
+    stageScreens.forEach(el => el.classList.add("hidden"));
     screens[id].classList.remove("hidden");
 
-    // Highlight nav button (only for s1..s12 buttons; other sections won't match)
-    navButtons.forEach(b => b.classList.toggle("active", b.dataset.screen === id));
+    setActiveNav(id);
 
-    // Update URL hash WITHOUT triggering anchor auto-scroll
-    history.replaceState(null, "", "#" + id);
+    // Update URL hash without triggering browser anchor jump
+    if (updateHash){
+      history.replaceState(null, "", `${location.pathname}${location.search}#${id}`);
+    }
   }
 
-  function go(id, collapseSidebar = true){
-    show(id);
+  function go(id, { collapseSidebar = true } = {}){
+    show(id, { updateHash: true });
 
     if (collapseSidebar){
       document.body.classList.add("navCollapsed");
       setExpanded(false);
     }
 
-    snapTop();
+    scrollTopAfterLayout();
   }
 
-  // --- Wire nav buttons ---
+  // Nav click
   navButtons.forEach(b => {
-    b.addEventListener("click", () => go(b.dataset.screen, true));
+    b.addEventListener("click", () => go(b.dataset.screen, { collapseSidebar: true }));
   });
 
-  // --- Wire CTA / jump buttons ---
+  // CTA / jump buttons
   jumpers.forEach(j => {
-    j.addEventListener("click", () => go(j.dataset.jump, true));
+    j.addEventListener("click", () => go(j.dataset.jump, { collapseSidebar: true }));
   });
 
-  // --- Toggle sidebar open/closed ---
+  // Toggle sidebar
   if (btn){
+    setExpanded(false);
     btn.addEventListener("click", () => {
       const isCollapsed = document.body.classList.toggle("navCollapsed");
       setExpanded(!isCollapsed);
-      // Keep scroll stable
-      snapTop();
+      scrollTopAfterLayout(); // keeps things visually stable
     });
   }
 
-  // --- Initial load: prevent browser anchor jump, then render ---
-  const initialHash = (location.hash || "#s1").slice(1);
-
-  // Remove hash temporarily so browser doesn't auto-jump
-  if (location.hash){
-    history.replaceState(null, "", location.pathname + location.search);
-  }
-
-  setExpanded(false);
-
-  // Let layout settle, then show, then snap top (extra-stable)
-  requestAnimationFrame(() => {
-    show(initialHash);
-    requestAnimationFrame(() => snapTop());
+  // Back/forward support
+  window.addEventListener("hashchange", () => {
+    const id = (location.hash || "#s1").slice(1);
+    show(id, { updateHash: false });
+    scrollTopAfterLayout();
   });
+
+  // Initial load
+  (function init(){
+    const id = (location.hash || "#s1").slice(1);
+    show(id, { updateHash: true });
+    scrollTopAfterLayout();
+  })();
 </script>
 </body>
 </html>
