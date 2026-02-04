@@ -3,6 +3,9 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
+ <script>
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+</script>
   <title>Commons — Creator Flow Mock (Light Mode)</title>
   <style>
     :root{
@@ -41,14 +44,18 @@
       line-height:1.35;
     }
 
-    .wrap{
-      max-width:1180px;
-      margin:22px auto;
-      padding:0 16px 44px;
-      display:grid;
-      grid-template-columns: 320px 1fr;
-      gap:16px;
-    }
+/* Wrap fills the viewport (minus your outside padding) */
+.wrap{
+  max-width:1180px;
+  margin: 0 auto;
+  padding: 22px 16px 22px;      /* remove the huge 44px bottom padding */
+  display:grid;
+  grid-template-columns: 320px 1fr;
+  gap:16px;
+
+  min-height: 100vh;            /* key */
+  align-items: start;
+}
 
     .sidebar{
       position:sticky;
@@ -107,16 +114,21 @@
     }
     .hint b{color:var(--text)}
 
-    .stage{
-      background: rgba(255,255,255,.7);
-      border:1px solid var(--line);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      overflow:hidden;
-      min-height:780px;
-      position:relative;
-      backdrop-filter: blur(10px);
-    }
+/* Stage becomes the scroll container and just fills available height */
+.stage{
+  background: rgba(255,255,255,.7);
+  border:1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+
+  overflow: auto;
+  height: auto;                 /* key: remove fixed calc height */
+  min-height: 0;                /* key for grid scrolling */
+  align-self: stretch;          /* key */
+
+  position:relative;
+  backdrop-filter: blur(10px);
+}
 
     .topbar{
       display:flex; align-items:center; justify-content:space-between;
@@ -512,11 +524,14 @@
 
 /* --- Sidebar collapse (make landing less overwhelming) --- */
 
-/* Start with sidebar collapsed (we'll set body.navCollapsed via JS) */
+/* Collapsed = sidebar is truly gone (no transform/sticky weirdness) */
 body.navCollapsed .sidebar{
-  transform: translateX(-110%);
-  opacity: 0;
-  pointer-events: none;
+  display: none;
+}
+
+/* When collapsed, stage takes full width */
+body.navCollapsed .wrap{
+  grid-template-columns: 1fr;
 }
 
 /* When collapsed, let stage take full width */
@@ -582,8 +597,9 @@ body:not(.navCollapsed) .navToggle{
   </style>
 </head>
 <body>
+  <button class="ghostBtn navToggle" id="navToggleBtn" type="button" aria-expanded="false">Storyboard</button>
+
   <div class="wrap">
-    <button class="ghostBtn navToggle" id="navToggleBtn" type="button">Storyboard</button>
     <aside class="sidebar">
       <div class="brand">
         <div class="dot"></div>
@@ -1060,7 +1076,7 @@ body:not(.navCollapsed) .navToggle{
       </section>
 
  <!-- #6a Invite -->
-      <section id="sInvite">
+      <section id="sInvite" class="hidden">
   <div class="content">
     <h2>Invite your audience</h2>
     <p class="muted">
@@ -1117,7 +1133,7 @@ body:not(.navCollapsed) .navToggle{
   </div>
 </section>
 
-<section id="sPosting">
+<section id="sPosting" class="hidden">
   <div class="content">
     <h2>Post once. Reach your community — and beyond.</h2>
     <p class="muted">
@@ -1551,68 +1567,102 @@ New post is up. Two questions for readers:
     </main>
   </div>
 
- <script>
+<script>
+  // --- Make scrolling predictable ---
+  if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+
   // --- Sidebar starts collapsed for a clean first impression ---
   document.body.classList.add("navCollapsed");
 
   const btn = document.getElementById("navToggleBtn");
-  const nav = document.getElementById("nav");
+  const stageEl = document.querySelector(".stage");
 
   const navButtons = Array.from(document.querySelectorAll("#nav button"));
   const jumpers = Array.from(document.querySelectorAll("[data-jump]"));
- // Treat every section inside the stage as a screen
-const stageScreens = Array.from(document.querySelectorAll(".stage section[id]"));
-const screens = stageScreens.reduce((acc, el) => (acc[el.id] = el, acc), {});
+
+  // Treat every section inside the stage as a screen
+  const stageScreens = Array.from(document.querySelectorAll(".stage section[id]"));
+  const screens = stageScreens.reduce((acc, el) => (acc[el.id] = el, acc), {});
 
   function setExpanded(isOpen){
     if (!btn) return;
     btn.setAttribute("aria-expanded", String(isOpen));
     btn.textContent = isOpen ? "Close" : "Storyboard";
   }
-  setExpanded(false);
+
+  function snapTop(){
+    // After any layout changes, snap the stage scroll back to top (twice = robust)
+    requestAnimationFrame(() => {
+      if (stageEl) stageEl.scrollTop = 0;
+      requestAnimationFrame(() => {
+        if (stageEl) stageEl.scrollTop = 0;
+      });
+    });
+  }
 
   function show(id){
-    // Hide all screens
+    // Hide all
     stageScreens.forEach(el => el.classList.add("hidden"));
 
-    // Fallback
+    // Default
     if (!screens[id]) id = "s1";
 
-    // Show requested screen
+    // Show one
     screens[id].classList.remove("hidden");
 
-    // Update nav active state
+    // Highlight nav button (only for s1..s12 buttons; other sections won't match)
     navButtons.forEach(b => b.classList.toggle("active", b.dataset.screen === id));
 
-    // Update URL hash without scroll jump
+    // Update URL hash WITHOUT triggering anchor auto-scroll
     history.replaceState(null, "", "#" + id);
   }
 
-  // Nav click -> show screen + collapse sidebar (better for demos)
-  navButtons.forEach(b => b.addEventListener("click", () => {
-    show(b.dataset.screen);
-    document.body.classList.add("navCollapsed");
-    setExpanded(false);
-  }));
+  function go(id, collapseSidebar = true){
+    show(id);
 
-  // In-page jump buttons -> show screen (do NOT auto-collapse; your call)
- jumpers.forEach(j => j.addEventListener("click", () => {
-  show(j.dataset.jump);
-  document.body.classList.add("navCollapsed");
-  setExpanded(false);
-}));
+    if (collapseSidebar){
+      document.body.classList.add("navCollapsed");
+      setExpanded(false);
+    }
 
-  // Toggle sidebar open/closed
+    snapTop();
+  }
+
+  // --- Wire nav buttons ---
+  navButtons.forEach(b => {
+    b.addEventListener("click", () => go(b.dataset.screen, true));
+  });
+
+  // --- Wire CTA / jump buttons ---
+  jumpers.forEach(j => {
+    j.addEventListener("click", () => go(j.dataset.jump, true));
+  });
+
+  // --- Toggle sidebar open/closed ---
   if (btn){
     btn.addEventListener("click", () => {
       const isCollapsed = document.body.classList.toggle("navCollapsed");
       setExpanded(!isCollapsed);
+      // Keep scroll stable
+      snapTop();
     });
   }
 
-  // Load initial screen from hash
-  const hash = (location.hash || "#s1").slice(1);
-  show(hash);
+  // --- Initial load: prevent browser anchor jump, then render ---
+  const initialHash = (location.hash || "#s1").slice(1);
+
+  // Remove hash temporarily so browser doesn't auto-jump
+  if (location.hash){
+    history.replaceState(null, "", location.pathname + location.search);
+  }
+
+  setExpanded(false);
+
+  // Let layout settle, then show, then snap top (extra-stable)
+  requestAnimationFrame(() => {
+    show(initialHash);
+    requestAnimationFrame(() => snapTop());
+  });
 </script>
 </body>
 </html>
