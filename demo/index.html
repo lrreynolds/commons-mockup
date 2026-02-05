@@ -1650,7 +1650,7 @@ New post is up. Two questions for readers:
         </div>
       </section>
 
-      <!-- #13 Funding setup -->
+<!-- #13 Enable funding -->
 <section id="s13" class="hidden">
   <div class="topbar">
     <div class="left">
@@ -1660,127 +1660,64 @@ New post is up. Two questions for readers:
         <span>Supporter memberships + tips</span>
       </div>
     </div>
-    <div class="chip">Optional • 2 minutes</div>
+    <div class="chip">Secure payouts via Stripe</div>
   </div>
 
   <div class="content">
     <div class="center">
-      <div class="header">
-        <div>
-          <h2>Turn on funding (optional)</h2>
-          <p>Secure payments via Stripe. Commons never holds your funds.</p>
-        </div>
-        <div class="chip">Works with Starter</div>
-      </div>
+      <div class="card">
 
-      <div class="grid fundingGrid2">
-        <!-- Left column -->
-        <div class="card">
-          <h3>1) Choose what to enable</h3>
-
-          <div class="toggleRow">
-            <div>
-              <b>Supporter memberships</b>
-              <div class="muted">Monthly support tiers</div>
-            </div>
-            <div class="switch" aria-hidden="true"></div>
-          </div>
-
-          <div class="toggleRow">
-            <div>
-              <b>One-time tips</b>
-              <div class="muted">Quick “thank you” contributions</div>
-            </div>
-            <div class="switch" aria-hidden="true"></div>
-          </div>
-
-          <div class="note" style="margin-top:12px;">
-            <b>Tip:</b> You can start with tips only and add memberships later.
-          </div>
-
-          <div class="divider"></div>
-
-          <h3>2) Connect payouts</h3>
-          <p class="muted" style="margin-top:6px;">
-            Stripe handles payments, taxes, and payouts. Commons only configures the experience.
-          </p>
-
-          <button class="cta" style="margin-top:10px;">Connect with Stripe</button>
-
-          <div class="muted tiny" style="margin-top:10px;">
-            Secure OAuth • Takes ~2 minutes • Disconnect anytime
-          </div>
+        <h3>Connect Stripe to receive funds</h3>
+        <div class="muted">
+          Stripe handles payments, tax, and payouts securely — Commons never holds your funds.
         </div>
 
-        <!-- Right column -->
-        <div class="card">
-          <h3>3) Set your options</h3>
-
-          <div class="miniSection">
-            <b>Membership tiers</b>
-            <div class="muted tiny">Suggested defaults — edit anytime</div>
-
-            <div class="tierRow">
-              <div class="tier">
-                <b>$5 / month</b>
-                <div class="muted tiny">Supporter</div>
-              </div>
-              <button class="miniBtn">Edit</button>
-            </div>
-
-            <div class="tierRow">
-              <div class="tier">
-                <b>$10 / month</b>
-                <div class="muted tiny">Backer</div>
-              </div>
-              <button class="miniBtn">Edit</button>
-            </div>
-
-            <div class="tierRow">
-              <div class="tier">
-                <b>$25 / month</b>
-                <div class="muted tiny">Sponsor</div>
-              </div>
-              <button class="miniBtn">Edit</button>
-            </div>
-
-            <button class="ghostBtn" style="margin-top:10px;">Add a tier</button>
-          </div>
-
-          <div class="miniSection">
-            <b>Tip amounts</b>
-            <div class="muted tiny">These appear as quick buttons</div>
-
-            <div class="pillRow">
-              <span class="pillTag">$3</span>
-              <span class="pillTag">$5</span>
-              <span class="pillTag">$10</span>
-              <span class="pillTag">Custom</span>
-            </div>
-          </div>
-
-          <div class="miniSection">
-            <b>What members will see</b>
-            <div class="previewCard">
-              <div class="muted tiny" style="margin-bottom:6px;">Support the community</div>
-              <div style="font-weight:900;">Help keep this space running.</div>
-              <div class="btnRow" style="margin-top:10px;">
-                <button class="cta" style="max-width:220px;">Become a supporter</button>
-                <button class="ghostBtn" style="max-width:140px;">Send a tip</button>
-              </div>
-            </div>
-          </div>
-
+        <div class="btnRow" style="margin-top:18px;">
+          <button class="cta">Connect with Stripe</button>
         </div>
-      </div>
 
-      <div class="footerBar">
-        <button class="secondary" data-jump="s5">Back</button>
-        <button class="primary" data-jump="s6">Continue</button>
-      </div>
+        <div class="note" style="margin-top:12px;">
+          Takes about 2 minutes. You can disconnect anytime.
+        </div>
 
-      <div class="note" style="margin-top:12px;">
-        <b>Important:</b> Commons uses Stripe for payments. You keep control and can disable funding at any time.
+        <div class="divider"></div>
+
+        <h3>Choose your funding options</h3>
+
+        <div class="toggleRow" style="margin-top:10px;">
+          <div>
+            <b>Supporter memberships</b>
+            <div class="muted">Offer monthly support tiers</div>
+          </div>
+          <div class="switch" aria-hidden="true"></div>
+        </div>
+
+        <div class="toggleRow" style="margin-top:10px;">
+          <div>
+            <b>One-time tips</b>
+            <div class="muted">Quick “thank you” contributions</div>
+          </div>
+          <div class="switch" aria-hidden="true"></div>
+        </div>
+
+        <div class="divider"></div>
+
+        <h3>Optional presets</h3>
+        <div class="pillRow">
+          <span class="pill">$3 tip</span>
+          <span class="pill">$5 tip</span>
+          <span class="pill">$10 tip</span>
+        </div>
+
+        <div class="note" style="margin-top:14px;">
+          You can edit these later in Settings.
+        </div>
+
+        <div class="footerBar" style="margin-top:24px;">
+          <button class="ghostBtn" data-jump="s6">Back</button>
+          <button class="primary" data-jump="s8">Continue</button>
+        </div>
+
       </div>
     </div>
   </div>
