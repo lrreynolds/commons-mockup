@@ -1,1683 +1,228 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
- <script>
-  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
-</script>
-  <title>Commons — Creator Flow Mock (Light Mode)</title>
-  <style>
-    :root{
-      /* Light mode + forest green brand */
-      --bg:#f4f7f5;
-      --card:#ffffff;
-      --card2:#fbfcfb;
-      --text:#102018;
-      --muted:#50665a;
-      --line:#d8e1db;
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Commons — A Calm Home for Your Community</title>
+<style>
+:root{
+  --bg:#f4f7f5;
+  --card:#ffffff;
+  --text:#102018;
+  --muted:#50665a;
+  --line:#d8e1db;
 
-      --btn:#1f6f4a;      /* forest green */
-      --btnText:#ffffff;
+  --btn:#1f6f4a;
+  --btnText:#ffffff;
+}
 
-      --ghost:#ffffff;
-      --pill:#eef4f0;
+*{box-sizing:border-box}
 
-      --accent:#1f6f4a;
-      --accent2:#0f5132;
+body{
+  font-family: system-ui, sans-serif;
+  margin:0;
+  line-height:1.5;
+  background:var(--bg);
+  color:var(--text);
+}
 
-      --shadow: 0 18px 50px rgba(16,32,24,.12);
-      --radius:18px;
-      --radius2:14px;
-      --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
-    }
+/* ---- Generic sections ---- */
 
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      background:
-        radial-gradient(1000px 520px at 20% 0%, rgba(31,111,74,.14) 0%, rgba(31,111,74,0) 62%),
-        radial-gradient(900px 520px at 80% 10%, rgba(15,81,50,.10) 0%, rgba(15,81,50,0) 62%),
-        var(--bg);
-      color:var(--text);
-      font-family:var(--font);
-      line-height:1.35;
-    }
+section{
+  max-width:960px;
+  margin:0 auto;
+  padding:80px 20px;
+}
 
-/* Wrap fills the viewport (minus your outside padding) */
-.wrap{
-  max-width:1180px;
-  margin: 0 auto;
-  padding: 22px 16px 22px;      /* remove the huge 44px bottom padding */
+h1{
+  font-size:42px;
+  line-height:1.1;
+  letter-spacing:-0.02em;
+}
+
+h2{font-size:32px}
+
+p{max-width:700px}
+
+.cta{
+  display:inline-block;
+  padding:14px 22px;
+  background:var(--btn);
+  color:var(--btnText);
+  border-radius:14px;
+  font-weight:900;
+  text-decoration:none;
+}
+
+.muted{color:var(--muted)}
+
+.grid{
   display:grid;
-  grid-template-columns: 320px 1fr;
-  gap:16px;
-
-  min-height: 100vh;            /* key */
-  align-items: start;
+  gap:24px;
 }
 
-    .sidebar{
-      position:sticky;
-      top:16px;
-      align-self:start;
-      background: rgba(255,255,255,.7);
-      border:1px solid var(--line);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding:14px;
-      backdrop-filter: blur(10px);
-    }
-
-    .brand{
-      display:flex; align-items:center; gap:10px;
-      padding:10px 10px 12px;
-      border-bottom:1px solid var(--line);
-      margin-bottom:12px;
-    }
-    .dot{
-      width:12px; height:12px; border-radius:999px;
-      background: var(--accent);
-      box-shadow: 0 0 0 4px rgba(31,111,74,.14);
-    }
-    .brand b{font-size:15px}
-    .brand span{display:block; font-size:12px; color:var(--muted); margin-top:2px}
-
-    .nav{
-      display:flex; flex-direction:column; gap:8px; margin-top:10px;
-    }
-    .nav button{
-      text-align:left;
-      width:100%;
-      background: rgba(255,255,255,.85);
-      border:1px solid var(--line);
-      color:var(--text);
-      padding:10px 10px;
-      border-radius: 12px;
-      cursor:pointer;
-      display:flex; justify-content:space-between; align-items:center;
-      gap:10px;
-    }
-    .nav button.active{
-      border-color: rgba(31,111,74,.55);
-      box-shadow: 0 0 0 3px rgba(31,111,74,.10) inset;
-    }
-    .nav small{color:var(--muted)}
-    .hint{
-      margin-top:14px;
-      padding:10px;
-      border-radius: 12px;
-      background: rgba(31,111,74,.06);
-      border:1px dashed rgba(31,111,74,.25);
-      color:var(--muted);
-      font-size:12px;
-    }
-    .hint b{color:var(--text)}
-
-/* Stage becomes the scroll container and just fills available height */
-.stage{
-  background: rgba(255,255,255,.7);
-  border:1px solid var(--line);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-
-  overflow: auto;
-  height: auto;                 /* key: remove fixed calc height */
-  min-height: 0;                /* key for grid scrolling */
-  align-self: stretch;          /* key */
-
-  position:relative;
-  backdrop-filter: blur(10px);
+@media(min-width:800px){
+  .grid{grid-template-columns:1fr 1fr}
 }
 
-    .topbar{
-      display:flex; align-items:center; justify-content:space-between;
-      padding:14px 16px;
-      border-bottom:1px solid var(--line);
-      background: rgba(255,255,255,.75);
-    }
-    .topbar .left{display:flex; align-items:center; gap:10px}
-    .logoMark{
-      width:28px; height:28px; border-radius:10px;
-      background: linear-gradient(135deg, rgba(31,111,74,1), rgba(31,111,74,.20));
-      border:1px solid rgba(31,111,74,.25);
-    }
-    .topbar .meta b{display:block; font-size:14px}
-    .topbar .meta span{display:block; font-size:12px; color:var(--muted)}
-    .chip{
-      font-size:12px;
-      color:var(--muted);
-      background: var(--pill);
-      border:1px solid var(--line);
-      padding:6px 10px;
-      border-radius:999px;
-      white-space:nowrap;
-    }
-
-    .content{ padding:18px; }
-
-    .grid{
-      display:grid;
-      grid-template-columns: 1fr 360px;
-      gap:16px;
-      align-items:start;
-    }
-
-    .card{
-      background: var(--card);
-      border:1px solid var(--line);
-      border-radius: var(--radius2);
-      padding:14px;
-    }
-    .card h3{margin:0 0 8px; font-size:14px}
-    .muted{color:var(--muted); font-size:12px}
-
-    .cta{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      gap:10px;
-      padding:12px 14px;
-      border-radius: 14px;
-      border:1px solid rgba(31,111,74,.15);
-      background: var(--btn);
-      color: var(--btnText);
-      cursor:pointer;
-      font-weight:800;
-      width:100%;
-    }
-    .ghostBtn{
-      width:100%;
-      padding:12px 14px;
-      border-radius: 14px;
-      border:1px solid var(--line);
-      background: var(--ghost);
-      color: var(--text);
-      cursor:pointer;
-      font-weight:800;
-    }
-    .btnRow{ display:flex; gap:10px; margin-top:12px; flex-wrap:wrap; }
-    .btnRow .cta{ flex:1; min-width:220px; }
-    .btnRow .ghostBtn{ flex:1; min-width:220px; }
-
-    .list{ display:flex; flex-direction:column; gap:10px; margin-top:10px; }
-    .item{
-      padding:10px 10px;
-      border-radius: 12px;
-      border:1px solid var(--line);
-      background: var(--card2);
-    }
-    .item b{font-size:13px}
-    .item div{margin-top:4px}
-
-    /* Forms */
-    .center{ max-width:760px; margin:0 auto; }
-    .header{
-      display:flex; align-items:flex-end; justify-content:space-between;
-      margin-bottom:12px;
-      gap:12px;
-    }
-    .header h1,.header h2{ margin:0; font-size:18px; }
-    .header p{margin:8px 0 0; color:var(--muted); font-size:12px}
-    .field{ margin-top:12px; }
-    label{
-      display:block;
-      font-size:12px;
-      color:var(--muted);
-      margin-bottom:6px;
-    }
-    input[type="text"], input[type="email"], input[type="password"], textarea, select{
-      width:100%;
-      border-radius: 14px;
-      border:1px solid var(--line);
-      background: #ffffff;
-      color: var(--text);
-      padding:12px 12px;
-      font-size:14px;
-      outline:none;
-    }
-    textarea{min-height:110px; resize:vertical}
-
-    .footerBar{
-      display:flex; gap:10px; margin-top:14px;
-      flex-wrap:wrap;
-    }
-    .primary{
-      flex:1;
-      background: var(--btn);
-      color: var(--btnText);
-      border:none;
-      border-radius: 14px;
-      padding:12px 14px;
-      font-weight:900;
-      cursor:pointer;
-      min-width:220px;
-    }
-    .secondary{
-      background: #ffffff;
-      color: var(--text);
-      border:1px solid var(--line);
-      border-radius: 14px;
-      padding:12px 14px;
-      font-weight:900;
-      cursor:pointer;
-      width:160px;
-    }
-
-    .progress{
-      display:flex;
-      gap:8px;
-      margin-top:12px;
-      align-items:center;
-      color:var(--muted);
-      font-size:12px;
-    }
-    .bar{
-      flex:1;
-      height:8px;
-      border-radius:999px;
-      background: rgba(31,111,74,.08);
-      border:1px solid rgba(31,111,74,.12);
-      overflow:hidden;
-    }
-    .bar > div{ height:100%; width:40%; background: rgba(31,111,74,.70); }
-
-    .note{
-      margin-top:12px;
-      padding:10px;
-      border-radius: 12px;
-      background: rgba(31,111,74,.06);
-      border:1px solid rgba(31,111,74,.18);
-      color:var(--muted);
-      font-size:12px;
-    }
-    .note b{color:var(--text)}
-
-    .pillRow{display:flex; gap:8px; flex-wrap:wrap; margin-top:10px;}
-    .pillTag{
-      background: var(--pill);
-      border:1px solid var(--line);
-      border-radius:999px;
-      padding:6px 10px;
-      font-size:12px;
-      color:var(--muted);
-    }
-
-    /* Link preview */
-    .preview{
-      display:flex; gap:12px;
-      border:1px solid var(--line);
-      background: var(--card2);
-      border-radius: 14px;
-      padding:12px;
-      margin-top:12px;
-    }
-    .thumb{
-      width:86px; height:86px;
-      border-radius: 12px;
-      background: linear-gradient(135deg, rgba(31,111,74,.20), rgba(31,111,74,.06));
-      border:1px solid rgba(31,111,74,.18);
-      flex:0 0 auto;
-    }
-    .preview b{display:block; font-size:14px}
-    .preview p{margin:6px 0 0; color:var(--muted); font-size:12px}
-
-    .audience{
-      display:flex; gap:10px; margin-top:10px;
-      background: var(--pill);
-      border:1px solid var(--line);
-      border-radius: 14px;
-      padding:8px;
-      width:fit-content;
-    }
-    .audience label{
-      margin:0;
-      display:flex;
-      align-items:center;
-      gap:8px;
-      font-size:13px;
-      color:var(--text);
-      cursor:pointer;
-    }
-    .audience input{accent-color: var(--accent)}
-
-    .tag{
-      color: var(--accent2);
-      font-weight: 800;
-      margin-left: 6px;
-      cursor: default;
-      white-space:nowrap;
-    }
-
-    /* Feed (illustrative only) */
-    .feed{ max-width:860px; margin:0 auto; display:flex; flex-direction:column; gap:12px; }
-    .post{
-      border:1px solid var(--line);
-      background: var(--card);
-      border-radius: var(--radius2);
-      padding:14px;
-    }
-    .who{
-      display:flex; align-items:center; justify-content:space-between;
-      margin-bottom:10px;
-    }
-    .whoLeft{display:flex; align-items:center; gap:10px}
-    .avatar{
-      width:30px; height:30px; border-radius:999px;
-      background: rgba(31,111,74,.10);
-      border:1px solid rgba(31,111,74,.18);
-    }
-    .whoLeft b{font-size:13px}
-    .small{font-size:12px; color:var(--muted)}
-    .pin{
-      font-size:11px;
-      color:var(--muted);
-      border:1px solid var(--line);
-      background: var(--pill);
-      padding:4px 8px;
-      border-radius:999px;
-    }
-    .reply{
-      margin-top:10px;
-      padding-top:10px;
-      border-top:1px solid rgba(16,32,24,.08);
-      display:flex;
-      gap:10px;
-    }
-    .reply .bubble{
-      border:1px solid rgba(16,32,24,.08);
-      background: rgba(31,111,74,.05);
-      border-radius: 14px;
-      padding:10px;
-      flex:1;
-    }
-    .reply .bubble b{font-size:12px}
-    .reply .bubble p{margin:6px 0 0; color:var(--text); font-size:13px}
-
-    /* Landing hero */
-    .hero{ padding:26px 18px 18px; }
-    .hero h1{ margin:0; font-size:28px; letter-spacing:-.02em; }
-    .hero p{
-      margin:10px 0 0;
-      color:var(--muted);
-      font-size:13px;
-      max-width:740px;
-    }
-    .hero .ctaRow{
-      display:flex; gap:10px; flex-wrap:wrap;
-      margin-top:16px;
-      max-width:740px;
-    }
-    .hero .ctaRow .cta{max-width:260px}
-    .hero .ctaRow .ghostBtn{max-width:260px}
-    .hero .bullets{
-      margin-top:16px;
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:10px;
-      max-width:740px;
-    }
-    .bullet{
-      padding:10px;
-      border-radius:14px;
-      border:1px solid var(--line);
-      background: var(--card);
-      color:var(--muted);
-      font-size:12px;
-    }
-    .bullet b{color:var(--text)}
-    .hidden{display:none}
-
-    /* little toggles */
-    .toggleRow{
-      display:flex; gap:10px; align-items:center; justify-content:space-between;
-      border:1px solid var(--line);
-      background: var(--card2);
-      border-radius: 14px;
-      padding:10px 12px;
-      margin-top:10px;
-    }
-    .toggleRow b{font-size:13px}
-    .switch{
-      width:48px; height:26px; border-radius:999px;
-      background: rgba(31,111,74,.18);
-      border:1px solid rgba(31,111,74,.25);
-      position:relative;
-    }
-    .switch::after{
-      content:"";
-      width:20px; height:20px;
-      position:absolute;
-      top:2px; left:2px;
-      border-radius:999px;
-      background: var(--btn);
-    }
-
-    @media (max-width: 1020px){
-      .wrap{grid-template-columns:1fr}
-      .sidebar{position:relative}
-      .grid{grid-template-columns:1fr}
-      .stage{min-height:680px}
-      .hero .bullets{grid-template-columns:1fr}
-    }
-
-    /* --- Landing responsiveness helpers --- */
-.heroGrid{
-  grid-template-columns: 1fr 360px;
-  align-items: start;
-  max-width: 980px;
+.card{
+  background:white;
+  padding:20px;
+  border-radius:16px;
 }
 
-/* Make funding tiles auto-wrap cleanly */
-.fundingGrid{
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 10px;
+/* ===== HERO ===== */
+
+.hero{
+  padding:80px 18px 70px;
+  display:flex;
+  justify-content:center;
 }
 
-/* Mobile: stack the hero */
-@media (max-width: 920px){
-  .heroGrid{
-    grid-template-columns: 1fr;
-    max-width: 740px;
-  }
-}
-
-/* --- Design polish patch (landing) --- */
-.topbar .chip{
-  font-weight: 800;
-  padding: 10px 12px;
-  border-radius: 999px;
-  letter-spacing: 0.2px;
+.heroInner{
+  max-width:960px;
+  margin:0 auto;
+  padding:0 56px;
 }
 
 .hero h1{
-  line-height: 1.05;
-  letter-spacing: -0.2px;
+  font-size:clamp(34px,5vw,42px);
+  line-height:1.05;
+  margin:0;
 }
 
-.hero p{
-  margin-block: 8px;
+.hero .sub{
+  margin-top:14px;
+  font-size:18px;
+  color:var(--muted);
+  max-width:720px;
 }
 
-.proofLine{
-  margin-top: 10px;
-  max-width: 58ch;
+.hero .sub b{color:var(--text)}
+
+/* ---- Benefit tiles ---- */
+
+
+
+.benefitGrid{
+  margin-top: 46px;
+  display: grid;
+  gap: 18px;
+  grid-template-columns: 1fr;              /* mobile default */
 }
 
-.bullets{ gap: 10px; }
-.bullet{ padding: 12px; border-radius: 14px; }
-
-@media (max-width: 920px){
-  .topbar .chip{ padding: 8px 10px; font-size: 12px; }
-  .proofLine{ max-width: 100%; }
-}
-
-#sInvite .card, #sPosting .card{
-  transition: transform .15s ease, box-shadow .15s ease;
-}
-
-#sInvite .card:hover, #sPosting .card:hover{
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0,0,0,.06);
-}
-
-/* --- Sidebar collapse (make landing less overwhelming) --- */
-
-/* Collapsed = sidebar is truly gone (no transform/sticky weirdness) */
-body.navCollapsed .sidebar{
-  display: none;
-}
-
-/* When collapsed, stage takes full width */
-body.navCollapsed .wrap{
-  grid-template-columns: 1fr;
-}
-
-/* When collapsed, let stage take full width */
-body.navCollapsed .wrap{
-  grid-template-columns: 1fr;
-}
-
-/* Smooth */
-.sidebar, .wrap{
-  transition: transform .2s ease, opacity .2s ease, grid-template-columns .2s ease;
-}
-
-/* Toggle button */
-.navToggle{
-  position: fixed;
-  top: 14px;
-  left: 14px;
-  z-index: 250;
-  border-radius: 999px;
-  padding: 10px 12px;
-  font-weight: 900;
-  width: auto;           /* override ghostBtn's 100% width */
-  box-shadow: 0 10px 24px rgba(0,0,0,.06);
-}
-
-/* Mobile: keep toggle out of the content flow */
-
-  @media (max-width: 1020px){
-  .navToggle{
-    backdrop-filter: blur(8px);
-    background: rgba(255,255,255,.85);
+@media (min-width: 760px){
+  .benefitGrid{
+    grid-template-columns: repeat(2, 1fr); /* tablet */
   }
 }
 
-  /* Add breathing room so it doesn’t overlap the topbar */
-  .stage{
-    padding-top: 56px;
+@media (min-width: 1040px){
+  .benefitGrid{
+    grid-template-columns: repeat(3, 1fr); /* desktop: always 3 across */
   }
 }
-
-/* When sidebar is open on desktop, push toggle to the right */
-body:not(.navCollapsed) .navToggle{
-  left: calc(16px + 320px + 16px); /* wrap padding + sidebar + gap */
+.benefit{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:18px;
 }
 
-/* Mobile/tablet: make sidebar an overlay drawer when opened */
-@media (max-width: 1020px){
-  body.navCollapsed .wrap{
-    grid-template-columns: 1fr; /* already true, keep explicit */
-  }
-
-  .sidebar{
-    position: fixed;
-    top: 14px;
-    left: 14px;
-    width: min(86vw, 340px);
-    max-height: calc(100vh - 28px);
-    overflow: auto;
-    z-index: 240;
-  }
-
-  body.navCollapsed .sidebar{
-    transform: translateX(-120%);
-  }
-
-  body:not(.navCollapsed) .navToggle{
-    left: calc(14px + min(86vw, 340px) + 12px);
-  }
+.benefit h3{
+  margin:0 0 8px;
+  font-size:16px;
 }
 
-.sidebar{
-  background: rgba(255,255,255,.62); /* was .7 */
-  box-shadow: 0 12px 34px rgba(16,32,24,.10); /* slightly softer */
-}
-.nav button{
-  background: rgba(255,255,255,.75); /* was .85 */
+.benefit p{
+  margin:0;
+  color:var(--muted);
+  font-size:14px;
 }
 
-/* --- Mobile: prevent the fixed Storyboard button from covering the stage --- */
-@media (max-width: 1020px){
-  /* create a “header gutter” for the fixed button */
-  .wrap{
-    padding-top: calc(22px + 56px); /* original top padding + button height-ish */
-  }
+/* ---- Centered promise column ---- */
 
-  .navToggle{
-    top: calc(14px + env(safe-area-inset-top, 0px));
-    left: 14px;
-  }
+.heroSpeed{
+  font-size:1.1rem;
+  font-weight:800;
+  color:var(--btn);
+  text-align:center;
 
-  /* on mobile we don’t need the “push-right when sidebar open” behavior */
-  body:not(.navCollapsed) .navToggle{
-    left: 14px;
-  }
+  max-width:420px;
+  margin:28px auto 40px;
 }
-  </style>
+
+.heroPromise{
+  font-weight:800;
+  color:var(--btn);
+  text-align:center;
+
+  max-width:450px;
+  margin:40px auto 18px;
+}
+
+.heroBottomCta{
+  display:flex;
+  justify-content:center;
+}
+
+/* ---- Mobile polish ---- */
+
+@media (max-width:640px){
+  section{padding:64px 16px}
+  .heroInner{padding:0 22px}
+  .hero .sub{font-size:16px}
+}
+
+
+</style>
 </head>
 <body>
-  <button class="ghostBtn navToggle" id="navToggleBtn" type="button" aria-expanded="false">Storyboard</button>
+<section class="hero">
+  <div class="heroInner">
+    <h1>Turn comments into a real community.</h1>
 
-  <div class="wrap">
-    <aside class="sidebar">
-      <div class="brand">
-        <div class="dot"></div>
-        <div>
-          <b>Commons — Creator Flow Mock</b>
-          <span>Light mode • forest green</span>
-        </div>
-      </div>
-
-      <div class="nav" id="nav">
-        <button data-screen="s1" class="active">Landing page <small>#1</small><span>→</span></button>
-        <button data-screen="s2">Setup: create account <small>#2</small><span>→</span></button>
-        <button data-screen="s3">Setup: choose plan <small>#3</small><span>→</span></button>
-        <button data-screen="s4">Setup: name + domain <small>#4</small><span>→</span></button>
-        <button data-screen="s5">Setup: branding <small>#5</small><span>→</span></button>
-        <button data-screen="s6">Launch success <small>#6</small><span>→</span></button>
-        <button data-screen="s7">Creator dashboard <small>#7</small><span>→</span></button>
-        <button data-screen="s8">Welcome post <small>#8</small><span>→</span></button>
-        <button data-screen="s9">Invite audience <small>#9</small><span>→</span></button>
-        <button data-screen="s10">Composer: paste link <small>#10</small><span>→</span></button>
-        <button data-screen="s11">Composer: preview + hashtags <small>#11</small><span>→</span></button>
-        <button data-screen="s12">Posted + engage via Mastodon <small>#12</small><span>→</span></button>
-      </div>
-
-      <div class="hint">
-        <b>Pitch flow</b><br/>
-        Landing → setup → <b>welcome</b> → <b>invite</b> → first share → conversation.<br/><br/>
-        Screenshot tip: resize window for “mobile-ish” shots.
-      </div>
-    </aside>
-
-    <main class="stage">
-
-<!-- #1 Landing -->
-<section id="s1">
-  <div class="topbar">
-    <div class="left">
-      <div class="logoMark"></div>
-      <div class="meta">
-        <b>Commons</b>
-        <span>A calm home for your audience</span>
-      </div>
-    </div>
-    <div class="chip">No Ads • No Algorithms • No Surprises</div>
-  </div>
-
-  <div class="content hero">
-    <div class="grid heroGrid">
-      <!-- Left: core message -->
-      <div>
-<h1 style="margin-bottom:6px;">Create your own Twitter-style community.</h1>
-
-<p style="font-size:15px; font-weight:800; margin:0 0 10px;">
-  No tech skills required — launch your community in minutes.
-</p>
-
-<p style="font-size:16px; font-weight:900; margin:0;">
-  The sane feed users have been looking for:
-</p>
-
-<p style="font-size:16px; font-weight:900; margin:4px 0 0;">
-  <span style="white-space:nowrap;">No Ads.</span>
-  <span style="white-space:nowrap;">No Algorithms.</span>
-  <span style="white-space:nowrap;">No Surprises.</span>
-</p>
-
-<p style="font-size:15px; font-weight:800; margin:8px 0 0;">
-  Plus simple built-in funding tools for creators.
-</p>
-     
-
-    
-
-        <div class="ctaRow" style="margin-top:14px;">
-          <button class="cta" data-jump="s2">Create your community</button>
-          <button class="ghostBtn" data-jump="s7">See a sample dashboard</button>
-        </div>
-
-        <div class="muted proofLine">
-  Built on proven open-source social tech. Works with existing Mastodon apps and cross-posting tools.
-</div>
-
-        <div class="bullets" style="margin-top:16px;">
-          <div class="bullet"><b>Chronological feed</b><br/>Posts appear in time order — no engagement ranking.</div>
-          <div class="bullet"><b>Only what you follow</b><br/>People, lists, and hashtags you choose — nothing injected.</div>
-          <div class="bullet"><b>Ad-free and uncluttered</b><br/>No sponsored content or attention selling.</div>
-        </div>
-      </div>
-
-      <!-- Right: mini feed visual -->
-      <div class="card" style="padding:12px;">
-        <h3 style="margin-bottom:6px;">What it feels like</h3>
-        <div class="muted">A simple feed for conversation.</div>
-
-        <div style="margin-top:12px; display:flex; flex-direction:column; gap:10px;">
-          <div class="item" style="background: var(--card2);">
-            <div style="display:flex; justify-content:space-between; gap:10px;">
-              <b>@journalist</b><span class="muted">2m</span>
-            </div>
-            <div style="margin-top:6px;">
-              New post is up. What question should guide next week’s briefing?
-              <span class="tag">#Ukraine</span>
-              <span class="tag">#journalism</span>
-            </div>
-            <div class="muted" style="margin-top:8px;">
-              ♥ 18 &nbsp;&nbsp; ↩ 6 &nbsp;&nbsp; ⤴ 3
-            </div>
-          </div>
-
-          <div class="item" style="background: var(--card2);">
-            <div style="display:flex; justify-content:space-between; gap:10px;">
-              <b>@reader</b><span class="muted">1m</span>
-            </div>
-            <div style="margin-top:6px;">
-              Thank you for the clarity. The “what locals need most” section really helped me understand.
-            </div>
-            <div class="muted" style="margin-top:8px;">
-              ♥ 7 &nbsp;&nbsp; ↩ 2
-            </div>
-          </div>
-
-          <div class="note" style="margin:0;">
-            <b>Sane by design:</b> no promoted posts, no “recommended for you”, no hidden ranking.
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Funding tools -->
-    <div class="card" style="margin-top:18px;">
-      <div class="row" style="align-items:flex-start; gap:14px;">
-        <div style="flex:1;">
-          <h3 style="margin-bottom:6px;">Simple ways your audience can fund your work</h3>
-          <div class="muted">
-            Basic funding is included. Turn it on when you’re ready — and upgrade to Growth for fundraising goals.
-          </div>
-        </div>
-      
-      </div>
-
-      <div class="fundingGrid" style="margin-top:12px;">
-       <div class="item" style="background: var(--card2);">
-  <b>Supporter memberships</b>
-  <div class="muted" style="margin-top:4px;">Available on Starter Plan — Monthly support tiers to help sustain your community</div>
-</div>
-<div class="item" style="background: var(--card2);">
-  <b>One-time tips</b>
-  <div class="muted" style="margin-top:4px;">Available on Starter Plan — Quick “thank you” contributions when people want to help</div>
-</div>
-<div class="item" style="background: var(--card2);">
-  <b>Fundraising goals</b>
-  <div class="muted" style="margin-top:4px;">Available on Growth Plan — raise funds for projects or causes transparently</div>
-</div>
-      </div>
-
-<div class="card" style="margin-top:20px;">
-  <h3 style="margin-bottom:8px;">Why creators use Commons</h3>
-
-  <div class="fundingGrid">
-    <div class="item" style="background: var(--card2);">
-      <b>A real community — not just comments</b>
-      <div class="muted" style="margin-top:4px;">
-        A Twitter-style feed where readers talk with you and each other — not buried comment threads.
-      </div>
-    </div>
-
-    <div class="item" style="background: var(--card2);">
-      <b>Your audience brings insights & resources</b>
-      <div class="muted" style="margin-top:4px;">
-        Members share news, sources, and perspectives — turning your community into a collective intelligence.
-      </div>
-    </div>
-
-    <div class="item" style="background: var(--card2);">
-      <b>Simplified funding in one place</b>
-      <div class="muted" style="margin-top:4px;">
-        Supporter memberships, tips, and fundraisers built in — no extra platforms required.
-      </div>
-    </div>
-
-    <div class="item" style="background: var(--card2);">
-      <b>Fits your existing workflow</b>
-      <div class="muted" style="margin-top:4px;">
-        Keep publishing on Substack or YouTube. Commons is where conversation lives.
-      </div>
-    </div>
-  </div>
-</div>
-</section>
-
-      <!-- #2 Start Create Account -->
-      <section id="s2" class="hidden">
-        <div class="topbar">
-          <div class="left">
-            <div class="logoMark"></div>
-            <div class="meta">
-              <b>Create your account</b>
-              <span>Launch your community</span>
-            </div>
-          </div>
-          <div class="chip">Step 1 of 4</div>
-        </div>
-
-        <div class="content">
-          <div class="center">
-            <div class="header">
-              <div>
-                <h2>Create Owner Account</h2>
-                <p>Two minutes to set up. You can change details later.</p>
-              </div>
-              <div class="chip">Simple monthly pricing. Cancel anytime.</div>
-            </div>
-
-            <div class="progress">
-              <span>Account</span>
-              <div class="bar"><div style="width:25%"></div></div>
-              <span>Setup</span>
-            </div>
-
-            <div class="card" style="margin-top:12px;">
-              <div class="field">
-                <label>Email</label>
-                <input type="email" value="alex@example.com" />
-              </div>
-              <div class="field">
-                <label>Password</label>
-                <input type="password" value="password123" />
-              </div>
-              <div class="field">
-                <label>Creator name</label>
-                <input type="text" value="Alex" />
-              </div>
-
-              <div class="footerBar">
-                <button class="secondary" data-jump="s1">Back</button>
-                <button class="primary" data-jump="s3">Continue</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- #3 Setup: plan -->
-      <section id="s3" class="hidden">
-        <div class="topbar">
-          <div class="left">
-            <div class="logoMark"></div>
-            <div class="meta">
-              <b>Set up your community</b>
-              <span>Choose a simple plan</span>
-            </div>
-          </div>
-          <div class="chip">Step 2 of 4</div>
-        </div>
-
-        <div class="content">
-          <div class="center">
-            <div class="header">
-              <div>
-                <h2>Pick a plan</h2>
-                <p>Keep it simple for MVP. Upgrade options later.</p>
-              </div>
-              <div class="chip">5–minute launch</div>
-            </div>
-
-            <div class="progress">
-              <span>Account</span>
-              <div class="bar"><div style="width:45%"></div></div>
-              <span>Setup</span>
-            </div>
-
-            <div class="grid" style="grid-template-columns: 1fr 1fr; gap:12px;">
-  <div class="card">
-    <h3>Starter</h3>
-    <div class="muted">For launching your community</div>
-    <div style="font-size:26px; font-weight:900; margin-top:8px;">$15<span class="muted" style="font-size:14px; font-weight:700;">/mo</span></div>
-
-    <div class="list" style="margin-top:12px;">
-      <div class="item"><b>Hosted community</b><div class="muted">Mastodon-based, managed for you</div></div>
-      <div class="item"><b>Basic funding</b><div class="muted">Supporter memberships + one-time tips</div></div>
-      <div class="item"><b>Commons address</b><div class="muted">Use a Commons subdomain to start</div></div>
-      <div class="item"><b>Standard support</b><div class="muted">Email support, typically within 48 hours</div></div>
-      <div class="item"><b>1,000 character posts</b><div class="muted">A little extra room by default</div></div>
-      <div class="item"><b>Backups + monitoring</b><div class="muted">Included</div></div>
-    </div>
-
-    <div class="note" style="margin-top:12px;">
-      Best for busy creators who want a calm, sane community without tech overhead.
-    </div>
-  </div>
-
-  <div class="card" style="border:2px solid rgba(14, 116, 144, .25);">
-    <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
-      <h3 style="margin:0;">Growth</h3>
-      <div class="chip">Most creators</div>
-    </div>
-    <div class="muted">For more active communities</div>
-    <div style="font-size:26px; font-weight:900; margin-top:8px;">$29<span class="muted" style="font-size:14px; font-weight:700;">/mo</span></div>
-
-    <div class="list" style="margin-top:12px;">
-      <div class="item"><b>Everything in Starter</b><div class="muted">Plus the upgrades below</div></div>
-      <div class="item"><b>Custom domain</b><div class="muted">Use your own community address</div></div>
-      <div class="item"><b>Fundraising goals</b><div class="muted">Goal-based campaigns with progress tracking</div></div>
-      <div class="item"><b>Priority support</b><div class="muted">Email support, typically within 24 hours</div></div>
-      <div class="item"><b>More media capacity</b><div class="muted">Higher storage & throughput</div></div>
-    </div>
-
-    <div class="note" style="margin-top:12px;">
-      Best once your community is active and you want goal-oriented fundraising.
-    </div>
-  </div>
-</div>
-
-<div class="note" style="margin-top:12px;">
-  <b>Simple billing:</b> pay monthly, cancel anytime.
-</div>
-
-            <div class="footerBar">
-              <button class="secondary" data-jump="s2">Back</button>
-              <button class="primary" data-jump="s4">Continue</button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- #4 Setup: name + domain -->
-      <section id="s4" class="hidden">
-        <div class="topbar">
-          <div class="left">
-            <div class="logoMark"></div>
-            <div class="meta">
-              <b>Set up your community</b>
-              <span>Name + community address</span>
-            </div>
-          </div>
-          <div class="chip">Step 3 of 4</div>
-        </div>
-
-        <div class="content">
-          <div class="center">
-            <div class="header">
-              <div>
-                <h2>Name your community</h2>
-                <p>This becomes the brand your audience recognizes.</p>
-              </div>
-              <div class="chip">Editable later</div>
-            </div>
-
-            <div class="progress">
-              <span>Account</span>
-              <div class="bar"><div style="width:70%"></div></div>
-              <span>Setup</span>
-            </div>
-
-            <div class="card" style="margin-top:12px;">
-              <div class="field">
-                <label>Community name</label>
-                <input type="text" value="Ukraine News Community" />
-              </div>
-
-              <div class="field">
-                <label>Tagline (optional)</label>
-                <input type="text" value="A place for readers to connect and discuss Ukraine news." />
-              </div>
-
-              <div class="field">
-                <label>Community address</label>
-                <select>
-                  <option selected>ukrainenews.commons.social (recommended)</option>
-                  <option>Use my custom domain (Growth Plan - connect later)</option>
-                </select>
-                <div class="muted" style="margin-top:8px;">
-                  Tip: start with a Commons address now. Custom domain can be added later without disrupting members.
-                </div>
-              </div>
-
-              <div class="footerBar">
-                <button class="secondary" data-jump="s3">Back</button>
-                <button class="primary" data-jump="s5">Continue</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- #5 Setup: branding -->
-      <section id="s5" class="hidden">
-        <div class="topbar">
-          <div class="left">
-            <div class="logoMark"></div>
-            <div class="meta">
-              <b>Set up your community</b>
-              <span>Branding</span>
-            </div>
-          </div>
-          <div class="chip">Step 4 of 4</div>
-        </div>
-
-        <div class="content">
-          <div class="center">
-            <div class="header">
-              <div>
-                <h2>Add your branding</h2>
-                <p>Make it feel like yours. Keep it light for MVP.</p>
-              </div>
-              <div class="chip">Logo required</div>
-            </div>
-
-            <div class="progress">
-              <span>Account</span>
-              <div class="bar"><div style="width:92%"></div></div>
-              <span>Setup</span>
-            </div>
-
-            <div class="card" style="margin-top:12px;">
-              <div class="field">
-                <label>Logo (square)</label>
-                <input type="text" value="Upload logo… (mock)" />
-              </div>
-
-              <div class="field">
-                <label>Banner image (optional)</label>
-                <input type="text" value="Upload banner… (mock)" />
-              </div>
-
-              <div class="note">
-                <b>Keep it simple:</b> you can update visuals any time. The best early signal is an active conversation.
-              </div>
-
-              <div class="footerBar">
-                <button class="secondary" data-jump="s4">Back</button>
-                <button class="primary" data-jump="s6">Launch community</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- #6 Launch success -->
-      <section id="s6" class="hidden">
-        <div class="topbar">
-          <div class="left">
-            <div class="logoMark"></div>
-            <div class="meta">
-              <b>You're live 🎉</b>
-              <span>Your community is ready</span>
-            </div>
-          </div>
-          <div class="chip">ukrainenews.commons.social</div>
-        </div>
-
-        <div class="content">
-          <div class="center">
-            <div class="card">
-              <h3>Ukraine News Community is live</h3>
-              <div class="muted">Next: post a welcome message and invite your audience.</div>
-
-              <div class="btnRow">
-                <button class="cta" data-jump="s8">Write welcome post</button>
-                <button class="ghostBtn" data-jump="s9">Invite audience</button>
-              </div>
-
-              <div class="note">
-                <b>Fastest launch recipe:</b> Welcome post → Invite → Share your latest link.
-              </div>
-
-              <div class="btnRow">
-                <button class="ghostBtn" data-jump="s7">Go to dashboard</button>
-                <button class="ghostBtn" data-jump="s10">Skip ahead to composer</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
- <!-- #6a Invite -->
-      <section id="sInvite" class="hidden">
-  <div class="content">
-    <h2>Invite your audience</h2>
-    <p class="muted">
-      Commons makes it easy to bring your existing audience into your community.
+    <p class="sub">
+      Commons turns scattered comments into one shared Twitter-style feed (chronological, no ads or algorithms) —
+      with built-in fundraising — without extra content or technical setup.
     </p>
+    <p class="heroSpeed">
+  Launch in minutes — not months.
+</p>
 
-    <div class="grid" style="grid-template-columns:1fr 1fr; gap:14px; margin-top:14px;">
 
-      <!-- Substack -->
-      <div class="card">
-        <h3>Substack creators</h3>
-        <div class="list">
-          <div class="item">
-            <b>Email invite template</b>
-            <div class="muted">Send a quick announcement to subscribers</div>
-          </div>
-          <div class="item">
-            <b>Post footer link</b>
-            <div class="muted">Add a “Join the discussion on Commons” link</div>
-          </div>
-          <div class="item">
-            <b>Shareable community link</b>
-            <div class="muted">Use anywhere you already communicate</div>
-          </div>
-        </div>
-        <button class="ghostBtn" style="margin-top:10px;">Copy templates</button>
+
+    <div class="benefitGrid">
+      <div class="benefit">
+        <h3>Real conversations</h3>
+        <p>
+          Turn scattered comment threads into one shared chronological feed where your audience talks with you — and each other — openly, without subscriptions blocking participation (like Substack comments).
+        </p>
       </div>
 
-      <!-- YouTube -->
-      <div class="card">
-        <h3>YouTube creators</h3>
-        <div class="list">
-          <div class="item">
-            <b>Video description snippet</b>
-            <div class="muted">Invite viewers to join your Commons community</div>
-          </div>
-          <div class="item">
-            <b>Pinned comment text</b>
-            <div class="muted">Keep the invite visible under each video</div>
-          </div>
-          <div class="item">
-            <b>Shareable community link</b>
-            <div class="muted">Perfect for social bios</div>
-          </div>
-        </div>
-        <button class="ghostBtn" style="margin-top:10px;">Copy templates</button>
+      <div class="benefit">
+        <h3>Built-in fundraising</h3>
+        <p>
+          Supporter memberships and one-time tips live right alongside the conversation — no extra platforms, no patchwork of accounts. Upgrade later for goal-based fundraising.
+        </p>
       </div>
 
+      <div class="benefit">
+        <h3>Fits your workflow</h3>
+        <p>
+          Keep publishing on YouTube or Substack. Just share your links and start discussions — Commons becomes the home for conversation and community participation.
+        </p>
+      </div>
     </div>
+   <p class="heroPromise">
+  No ads • No algorithms • No surprises • Cancel anytime
+</p>
+    <div class="heroBottomCta">
 
-    <div class="note" style="margin-top:14px;">
-      Most creators see their first members join within hours of sharing.
+      <a class="cta" href="#start">Create your community</a>
     </div>
   </div>
 </section>
 
-<section id="sPosting" class="hidden">
-  <div class="content">
-    <h2>Post once. Reach your community — and beyond.</h2>
-    <p class="muted">
-      Commons is built on Mastodon, so every post lives in your community and travels across the wider fediverse.
-    </p>
-
-    <div class="grid" style="grid-template-columns:1fr 1fr 1fr; gap:12px; margin-top:16px;">
-
-      <div class="card">
-        <h3>Write in Commons</h3>
-        <p class="muted">
-          Use the simple built-in composer or your favorite posting tools.
-        </p>
-      </div>
-
-      <div class="card">
-        <h3>Appears in your community</h3>
-        <p class="muted">
-          Members see posts in a calm, chronological feed.
-        </p>
-      </div>
-
-      <div class="card">
-        <h3>Discovered across the wider Fediverse</h3>
-        <p class="muted">
-          Followers on other servers and hashtags can find and engage.
-        </p>
-      </div>
-
-    </div>
-
-    <div class="note" style="margin-top:14px;">
-      No extra posting work. No algorithms deciding what gets seen.
-    </div>
-  </div>
-</section>
-      <!-- #7 Creator dashboard -->
-      <section id="s7" class="hidden">
-        <div class="topbar">
-          <div class="left">
-            <div class="logoMark"></div>
-            <div class="meta">
-              <b>Commons</b>
-              <span>Creator dashboard</span>
-            </div>
-          </div>
-          <div class="chip">Ukraine News Community</div>
-        </div>
-
-        <div class="content grid">
-          <div class="card">
-            <h3>Ukraine News Community</h3>
-            <div class="muted">A place for readers to connect and discuss Ukraine news.</div>
-
-            <div class="list">
-              <div class="item"><b>Invite link</b><div class="muted">ukrainenews.commons.social/invite</div></div>
-              <div class="item"><b>Recommended first steps</b><div class="muted">Welcome post → Invite → Share your latest link</div></div>
-            </div>
-
-            <div class="btnRow">
-              <button class="cta" data-jump="s10">Share a newsletter or video link</button>
-              <button class="ghostBtn" data-jump="s12">Open community (web)</button>
-            </div>
-
-            <div class="note">
-              <b>Engagement happens in the community:</b> reply in the native web UI or your favorite mobile app.
-              Commons keeps posting simple.
-            </div>
-          </div>
-
-          <div class="card">
-            <h3>Post using other tools (optional)</h3>
-            <div class="muted">
-              If you already schedule/cross-post, keep your workflow. Your community is compatible with standard apps/tools.
-            </div>
-
-            <div class="list" style="margin-top:12px;">
-              <div class="item"><b>Community server</b><div class="muted">ukrainenews.commons.social</div></div>
-              <div class="item"><b>Creator handle</b><div class="muted">@alex@ukrainenews.commons.social</div></div>
-              <div class="item"><b>Use cases</b><div class="muted">Schedule posts • Cross-post • Mobile posting</div></div>
-            </div>
-
-            <div class="note" style="margin-top:12px;">
-              <b>How it works:</b> connect your server in a Mastodon client/scheduler. Use hashtags for discovery beyond members.
-            </div>
-
-            <div class="btnRow">
-              <button class="ghostBtn" data-jump="s10">Use Commons composer (easy)</button>
-              <button class="ghostBtn" data-jump="s12">See feed example</button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- #8 Welcome post -->
-      <section id="s8" class="hidden">
-        <div class="topbar">
-          <div class="left">
-            <div class="logoMark"></div>
-            <div class="meta">
-              <b>Write your welcome post</b>
-              <span>Set the tone (and pin it)</span>
-            </div>
-          </div>
-          <div class="chip">First impression</div>
-        </div>
-
-        <div class="content">
-          <div class="center">
-            <div class="header">
-              <div>
-                <h2>Welcome message</h2>
-                <p>This is what members see first. Keep it short and warm.</p>
-              </div>
-              <div class="chip">Template included</div>
-            </div>
-
-            <div class="card">
-              <div class="field">
-                <label>Post title (optional)</label>
-                <input type="text" value="Welcome to Ukraine News Community 👋" />
-              </div>
-
-              <div class="field">
-                <label>Message</label>
-               <textarea>
-I created this space for readers who want to discuss my reporting and analysis on Ukraine thoughtfully — without algorithmic noise.
-
-A few simple norms:
-• Be kind and human. No demeaning language.
-• Argue with ideas, not people.
-• Share sources when stating facts.
-• No graphic images or gore here.
-• Fundraising links are OK when clearly labeled and reputable.
-
-✅ Introduce yourself below:
-• How did you find this community?
-• What topics do you want more coverage on?
-• What do you hope to learn or contribute?
-
-Thank you for helping keep this a calm corner of the internet.
-</textarea>
-              </div>
-
-              <div class="toggleRow">
-                <div>
-                  <b>Pin this post</b>
-                  <div class="muted">Shows at the top of the community feed</div>
-                </div>
-                <div class="switch" aria-hidden="true"></div>
-              </div>
-
-              <div class="footerBar">
-                <button class="secondary" data-jump="s7">Back</button>
-                <button class="primary" data-jump="s9">Save + go to invites</button>
-              </div>
-
-              <div class="note">
-                <b>MVP note:</b> Replies/moderation happen in native Mastodon web/mobile.
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- #9 Invite audience -->
-      <section id="s9" class="hidden">
-        <div class="topbar">
-          <div class="left">
-            <div class="logoMark"></div>
-            <div class="meta">
-              <b>Invite your audience</b>
-              <span>Copy/paste for Substack + YouTube</span>
-            </div>
-          </div>
-          <div class="chip">Launch email + link</div>
-        </div>
-
-        <div class="content">
-          <div class="center">
-            <div class="header">
-              <div>
-                <h2>Invite templates</h2>
-                <p>Send once. Then let conversation grow naturally.</p>
-              </div>
-              <div class="chip">Copy/paste</div>
-            </div>
-
-            <div class="card">
-              <div class="field">
-                <label>Invite link</label>
-                <input type="text" value="https://ukrainenews.commons.social" />
-              </div>
-
-              <div class="field">
-                <label>Substack email snippet</label>
-                <textarea>
-I just launched a reader community for discussing my Ukraine reporting and analysis.
-
-Join here (free): https://ukrainenews.commons.social
-
-Why I’m trying this:
-• Calm, chronological feed (no algorithms).
-• A place for questions and thoughtful discussion.
-• Free to join — optional supporters help cover hosting/moderation.
-
-If you join, please introduce yourself in the pinned welcome post 👋
-</textarea>
-              </div>
-
-              <div class="field">
-                <label>YouTube description snippet</label>
-              <textarea>
-🟩 Join my reader community (free): https://ukrainenews.commons.social
-
-Calm, chronological discussion of Ukraine coverage — no algorithms. Optional supporters help cover community costs.
-</textarea>
-              </div>
-
-              <div class="footerBar">
-                <button class="secondary" data-jump="s8">Back</button>
-                <button class="primary" data-jump="s10">Next: share your first link</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- #10 Composer: paste link -->
-      <section id="s10" class="hidden">
-        <div class="topbar">
-          <div class="left">
-            <div class="logoMark"></div>
-            <div class="meta">
-              <b>Share with your community</b>
-              <span>Paste a link → start a discussion</span>
-            </div>
-          </div>
-          <div class="chip">1,000 character posts</div>
-        </div>
-
-        <div class="content">
-          <div class="center">
-            <div class="header">
-              <div>
-                <h2>Share a link</h2>
-                <p>Drop your latest newsletter post or video. Commons will build a preview automatically.</p>
-              </div>
-              <div class="chip">Fastest workflow</div>
-            </div>
-
-            <div class="card">
-              <div class="field">
-                <label>Paste a newsletter or video link</label>
-               <input type="text" value="https://your-substack-url.com/p/field-notes-ukraine-frontlines" />
-                <div class="muted" style="margin-top:8px;">
-                  Tip: add hashtags in your message to help discovery beyond members.
-                </div>
-              </div>
-
-              <div class="footerBar">
-                <button class="secondary" data-jump="s9">Back</button>
-                <button class="primary" data-jump="s11">Continue</button>
-              </div>
-            </div>
-
-            <div class="note">
-              <b>Also works with other tools:</b> creators can post via Mastodon apps/schedulers too — Commons composer is the simplest option.
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- #11 Composer: preview + hashtags -->
-      <section id="s11" class="hidden">
-        <div class="topbar">
-          <div class="left">
-            <div class="logoMark"></div>
-            <div class="meta">
-              <b>Share with your community</b>
-              <span>Preview + prompt</span>
-            </div>
-          </div>
-          <div class="chip">Ready to post</div>
-        </div>
-
-        <div class="content">
-          <div class="center">
-            <div class="header">
-              <div>
-                <h2>Looks good</h2>
-                <p>Use hashtags for discovery beyond your members.</p>
-              </div>
-              <div class="chip">No algorithms</div>
-            </div>
-
-            <div class="card">
-              <div class="preview">
-                <div class="thumb"></div>
-                <div>
-                  <b>Field Notes: What I Saw, What Locals Need</b>
-<p>On-the-ground reporting, what’s changed this week, and what I’m watching next.</p>
-                  <div class="muted" style="margin-top:6px;">Preview generated from link</div>
-                </div>
-              </div>
-
-              <div class="field">
-                <label>What would you like to say?</label>
-               <textarea>
-New post is up. Two questions for readers:
-1) What part deserves deeper reporting next?
-2) What questions do you want answered in next week’s briefing?
-
-#Ukraine #journalism #war #geopolitics #humanitarian
-</textarea>
-                <div class="muted" style="margin-top:8px;">
-                  Hashtags make this discoverable to people outside your community who follow those tags.
-                </div>
-              </div>
-
-              <div class="field">
-                <label>Audience</label>
-                <div class="audience" role="radiogroup" aria-label="Audience">
-                  <label><input type="radio" name="aud" checked> Everyone</label>
-                  <label><input type="radio" name="aud"> Supporters</label>
-                </div>
-              </div>
-
-              <div class="footerBar">
-                <button class="secondary" data-jump="s10">Back</button>
-                <button class="primary" data-jump="s12">Post to community</button>
-              </div>
-
-              <div class="note">
-                <b>MVP scope guardrail:</b> Replies + moderation stay in native Mastodon web/mobile.
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- #12 Posted + engage via Mastodon -->
-      <section id="s12" class="hidden">
-        <div class="topbar">
-          <div class="left">
-            <div class="logoMark"></div>
-            <div class="meta">
-              <b>Ukraine News Community</b>
-              <span>Illustrative feed (engage via Mastodon web/mobile)</span>
-            </div>
-          </div>
-          <div class="chip">Live</div>
-        </div>
-
-        <div class="content">
-          <div class="feed">
-            <div class="post">
-              <div class="who">
-                <div class="whoLeft">
-                  <div class="avatar"></div>
-                  <div>
-                    <b>Alex (creator)</b>
-                    <span class="small">Pinned welcome message</span>
-                  </div>
-                </div>
-                <span class="pin">📌 pinned</span>
-              </div>
-              <div>
-                <b>Welcome to Ukraine News Community 👋</b>
-                <p class="muted" style="margin:8px 0 0;">
-                  Introduce yourself in the comments. Keep it kind. Let’s make this a calm corner of the internet.
-                </p>
-              </div>
-            </div>
-
-            <div class="post">
-              <div class="who">
-                <div class="whoLeft">
-                  <div class="avatar"></div>
-                  <div>
-                    <b>Alex (creator)</b>
-                    <span class="small">Shared a newsletter link</span>
-                  </div>
-                </div>
-                <span class="pin">2m ago</span>
-              </div>
-
-              <div class="preview" style="margin-top:0;">
-                <div class="thumb"></div>
-                <div>
-                 <b>Field Notes: What I Saw, What Locals Need</b>
-<p>On-the-ground reporting, what’s changed this week, and what I’m watching next.</p>
-                </div>
-              </div>
-
-              <div style="margin-top:10px;">
-               New post is up. What questions should guide next week’s briefing?
-<span class="tag">#Ukraine</span><span class="tag">#journalism</span><span class="tag">#geopolitics</span><span class="tag">#humanitarian</span>
-              </div>
-
-              <div class="reply">
-                <div class="avatar" style="width:26px;height:26px;"></div>
-                <div class="bubble">
-                  <b>Jamie</b>
-                  <p>Appreciate the clarity and restraint. The “what locals need most” section was powerful. Are there reputable orgs you recommend for aid?</p>
-                </div>
-              </div>
-
-              <div class="reply">
-                <div class="avatar" style="width:26px;height:26px;"></div>
-                <div class="bubble">
-                  <b>Alex (creator)</b>
-                  <p>Thank you. I’ll add a short list of reputable options in the next post (with context on where funds go).</p>
-                </div>
-              </div>
-            </div>
-
-            <div class="note" style="max-width:860px; margin:0 auto;">
-              <b>Important:</b> In the real product, you reply/moderate using the community’s native web UI or any Mastodon mobile app.
-              Commons stays focused on setup + easy posting + monetization.
-            </div>
-
-            <div class="btnRow" style="max-width:860px; margin:0 auto;">
-              <button class="ghostBtn" data-jump="s7">Back to dashboard</button>
-              <button class="cta" data-jump="s10">Share another link</button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-    </main>
-  </div>
-
-<script>
-(() => {
-  // Keep browser from trying to restore scroll positions between hash changes
-  if ("scrollRestoration" in history) history.scrollRestoration = "manual";
-
-  // Start collapsed for first impression
-  document.body.classList.add("navCollapsed");
-
-  const btn = document.getElementById("navToggleBtn");
-  const stageEl = document.querySelector(".stage");
-  const navButtons = Array.from(document.querySelectorAll("#nav button"));
-  const jumpers = Array.from(document.querySelectorAll("[data-jump]"));
-
-  // Treat every section in stage as a screen
-  const stageScreens = Array.from(document.querySelectorAll(".stage section[id]"));
-  const screens = stageScreens.reduce((acc, el) => (acc[el.id] = el, acc), {});
-
-  function setExpanded(isOpen){
-    if (!btn) return;
-    btn.setAttribute("aria-expanded", String(isOpen));
-    btn.textContent = isOpen ? "Close" : "Storyboard";
-  }
-  setExpanded(false);
-
-  function snapTop(){
-    // stage is the scroller now
-    requestAnimationFrame(() => {
-      stageEl?.scrollTo({ top: 0, left: 0, behavior: "auto" });
-      // double-tap for Safari-ish layout timing
-      requestAnimationFrame(() => stageEl?.scrollTo({ top: 0, left: 0, behavior: "auto" }));
-    });
-  }
-
-  function show(id, { updateHash = true } = {}){
-    if (!screens[id]) id = "s1";
-
-    stageScreens.forEach(el => el.classList.add("hidden"));
-    screens[id].classList.remove("hidden");
-
-    navButtons.forEach(b => b.classList.toggle("active", b.dataset.screen === id));
-
-    if (updateHash) history.replaceState(null, "", "#" + id);
-
-    snapTop();
-  }
-
-  function go(id){
-    show(id, { updateHash: true });
-    document.body.classList.add("navCollapsed");
-    setExpanded(false);
-  }
-
-  // Nav click
-  navButtons.forEach(b => b.addEventListener("click", () => go(b.dataset.screen)));
-
-  // CTA / jump buttons
-  jumpers.forEach(j => j.addEventListener("click", () => go(j.dataset.jump)));
-
-  // Toggle sidebar open/closed
-  btn?.addEventListener("click", () => {
-    const isCollapsed = document.body.classList.toggle("navCollapsed");
-    setExpanded(!isCollapsed);
-    // keep things feeling stable
-    snapTop();
-  });
-
-  // Initial load: prevent default anchor-jump, then show
-  const initial = (location.hash || "#s1").slice(1);
-  if (location.hash) history.replaceState(null, "", location.pathname + location.search);
-  show(initial, { updateHash: false });
-  history.replaceState(null, "", "#" + (screens[initial] ? initial : "s1"));
-
-  // Back/forward buttons
-  window.addEventListener("popstate", () => {
-    const id = (location.hash || "#s1").slice(1);
-    show(id, { updateHash: false });
-  });
-})();
-</script>
 </body>
 </html>
