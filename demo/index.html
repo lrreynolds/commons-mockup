@@ -627,6 +627,53 @@ body:not(.navCollapsed) .navToggle{
     left: 14px;
   }
 }
+    /* Funding setup layout tweaks */
+.fundingGrid2{
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+@media (min-width: 920px){
+  .fundingGrid2{ grid-template-columns: 1fr 1fr; }
+}
+
+.divider{
+  height:1px;
+  background: rgba(16,32,24,.08);
+  margin: 16px 0;
+}
+
+.miniSection{ margin-top: 14px; }
+.tiny{ font-size: 12px; color: var(--muted); }
+
+.tierRow{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  border:1px solid var(--line);
+  background: var(--card2);
+  border-radius: 14px;
+  padding:10px 12px;
+  margin-top:10px;
+}
+.tier b{ font-size: 14px; }
+
+.miniBtn{
+  border:1px solid var(--line);
+  background:#fff;
+  border-radius: 12px;
+  padding:8px 10px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.previewCard{
+  margin-top:10px;
+  border:1px solid var(--line);
+  background: rgba(31,111,74,.04);
+  border-radius: 16px;
+  padding:12px;
+}
   </style>
 </head>
 <body>
@@ -1071,42 +1118,48 @@ body:not(.navCollapsed) .navToggle{
         </div>
       </section>
 
-      <!-- #6 Launch success -->
-      <section id="s6" class="hidden">
-        <div class="topbar">
-          <div class="left">
-            <div class="logoMark"></div>
-            <div class="meta">
-              <b>You're live 🎉</b>
-              <span>Your community is ready</span>
-            </div>
-          </div>
-          <div class="chip">ukrainenews.commons.social</div>
+<!-- #6 Launch success -->
+<section id="s6" class="hidden">
+  <div class="topbar">
+    <div class="left">
+      <div class="logoMark"></div>
+      <div class="meta">
+        <b>You're live 🎉</b>
+        <span>Your community is ready</span>
+      </div>
+    </div>
+    <div class="chip">ukrainenews.commons.social</div>
+  </div>
+
+  <div class="content">
+    <div class="center">
+      <div class="card">
+        <h3>Ukraine News Community is live</h3>
+        <div class="muted">
+          Next: welcome your audience, invite them in, and (optionally) enable funding.
         </div>
 
-        <div class="content">
-          <div class="center">
-            <div class="card">
-              <h3>Ukraine News Community is live</h3>
-              <div class="muted">Next: post a welcome message and invite your audience.</div>
-
-              <div class="btnRow">
-                <button class="cta" data-jump="s8">Write welcome post</button>
-                <button class="ghostBtn" data-jump="s9">Invite audience</button>
-              </div>
-
-              <div class="note">
-                <b>Fastest launch recipe:</b> Welcome post → Invite → Share your latest link.
-              </div>
-
-              <div class="btnRow">
-                <button class="ghostBtn" data-jump="s7">Go to dashboard</button>
-                <button class="ghostBtn" data-jump="s10">Skip ahead to composer</button>
-              </div>
-            </div>
-          </div>
+        <!-- Primary launch actions -->
+        <div class="btnRow">
+          <button class="cta" data-jump="s8">Write welcome post</button>
+          <button class="ghostBtn" data-jump="s9">Invite audience</button>
+          <button class="ghostBtn" data-jump="s13">Enable funding (optional)</button>
         </div>
-      </section>
+
+        <div class="note">
+          <b>Fastest launch recipe:</b>
+          Welcome post → Invite → Enable funding → Share your latest link.
+        </div>
+
+        <!-- Secondary actions -->
+        <div class="btnRow">
+          <button class="ghostBtn" data-jump="s7">Go to dashboard</button>
+          <button class="ghostBtn" data-jump="s10">Skip ahead to composer</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
  <!-- #6a Invite -->
       <section id="sInvite" class="hidden">
@@ -1596,6 +1649,142 @@ New post is up. Two questions for readers:
           </div>
         </div>
       </section>
+
+      <!-- #13 Funding setup -->
+<section id="s13" class="hidden">
+  <div class="topbar">
+    <div class="left">
+      <div class="logoMark"></div>
+      <div class="meta">
+        <b>Enable funding</b>
+        <span>Supporter memberships + tips</span>
+      </div>
+    </div>
+    <div class="chip">Optional • 2 minutes</div>
+  </div>
+
+  <div class="content">
+    <div class="center">
+      <div class="header">
+        <div>
+          <h2>Turn on funding (optional)</h2>
+          <p>Secure payments via Stripe. Commons never holds your funds.</p>
+        </div>
+        <div class="chip">Works with Starter</div>
+      </div>
+
+      <div class="grid fundingGrid2">
+        <!-- Left column -->
+        <div class="card">
+          <h3>1) Choose what to enable</h3>
+
+          <div class="toggleRow">
+            <div>
+              <b>Supporter memberships</b>
+              <div class="muted">Monthly support tiers</div>
+            </div>
+            <div class="switch" aria-hidden="true"></div>
+          </div>
+
+          <div class="toggleRow">
+            <div>
+              <b>One-time tips</b>
+              <div class="muted">Quick “thank you” contributions</div>
+            </div>
+            <div class="switch" aria-hidden="true"></div>
+          </div>
+
+          <div class="note" style="margin-top:12px;">
+            <b>Tip:</b> You can start with tips only and add memberships later.
+          </div>
+
+          <div class="divider"></div>
+
+          <h3>2) Connect payouts</h3>
+          <p class="muted" style="margin-top:6px;">
+            Stripe handles payments, taxes, and payouts. Commons only configures the experience.
+          </p>
+
+          <button class="cta" style="margin-top:10px;">Connect with Stripe</button>
+
+          <div class="muted tiny" style="margin-top:10px;">
+            Secure OAuth • Takes ~2 minutes • Disconnect anytime
+          </div>
+        </div>
+
+        <!-- Right column -->
+        <div class="card">
+          <h3>3) Set your options</h3>
+
+          <div class="miniSection">
+            <b>Membership tiers</b>
+            <div class="muted tiny">Suggested defaults — edit anytime</div>
+
+            <div class="tierRow">
+              <div class="tier">
+                <b>$5 / month</b>
+                <div class="muted tiny">Supporter</div>
+              </div>
+              <button class="miniBtn">Edit</button>
+            </div>
+
+            <div class="tierRow">
+              <div class="tier">
+                <b>$10 / month</b>
+                <div class="muted tiny">Backer</div>
+              </div>
+              <button class="miniBtn">Edit</button>
+            </div>
+
+            <div class="tierRow">
+              <div class="tier">
+                <b>$25 / month</b>
+                <div class="muted tiny">Sponsor</div>
+              </div>
+              <button class="miniBtn">Edit</button>
+            </div>
+
+            <button class="ghostBtn" style="margin-top:10px;">Add a tier</button>
+          </div>
+
+          <div class="miniSection">
+            <b>Tip amounts</b>
+            <div class="muted tiny">These appear as quick buttons</div>
+
+            <div class="pillRow">
+              <span class="pillTag">$3</span>
+              <span class="pillTag">$5</span>
+              <span class="pillTag">$10</span>
+              <span class="pillTag">Custom</span>
+            </div>
+          </div>
+
+          <div class="miniSection">
+            <b>What members will see</b>
+            <div class="previewCard">
+              <div class="muted tiny" style="margin-bottom:6px;">Support the community</div>
+              <div style="font-weight:900;">Help keep this space running.</div>
+              <div class="btnRow" style="margin-top:10px;">
+                <button class="cta" style="max-width:220px;">Become a supporter</button>
+                <button class="ghostBtn" style="max-width:140px;">Send a tip</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="footerBar">
+        <button class="secondary" data-jump="s5">Back</button>
+        <button class="primary" data-jump="s6">Continue</button>
+      </div>
+
+      <div class="note" style="margin-top:12px;">
+        <b>Important:</b> Commons uses Stripe for payments. You keep control and can disable funding at any time.
+      </div>
+    </div>
+  </div>
+</section>
 
     </main>
   </div>
