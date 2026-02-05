@@ -1660,34 +1660,99 @@ New post is up. Two questions for readers:
         <span>Supporter memberships + tips</span>
       </div>
     </div>
-    <div class="chip">Secure payouts via Stripe</div>
+    <div class="chip">Powered by Stripe</div>
   </div>
 
   <div class="content">
     <div class="center">
       <div class="card">
-
         <h3>Connect Stripe to receive funds</h3>
         <div class="muted">
-          Stripe handles payments, tax, and payouts securely — Commons never holds your funds.
+          Stripe securely handles payouts, tax, and identity verification. Commons never asks for your bank details.
         </div>
 
         <div class="btnRow" style="margin-top:18px;">
-          <button class="cta">Connect with Stripe</button>
+          <!-- THIS now “works” in the storyboard -->
+          <button class="cta" data-jump="s13a">Connect with Stripe</button>
+          <button class="ghostBtn" data-jump="s8">Skip for now</button>
         </div>
 
         <div class="note" style="margin-top:12px;">
-          Takes about 2 minutes. You can disconnect anytime.
+          Typical setup: 2–5 minutes. You can enable funding later anytime.
         </div>
 
-        <div class="divider"></div>
+        <div class="footerBar" style="margin-top:18px;">
+          <button class="secondary" data-jump="s6">Back</button>
+          <button class="primary" data-jump="s8">Continue</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+      <!-- #13a Stripe hosted onboarding (mock) -->
+<section id="s13a" class="hidden">
+  <div class="topbar">
+    <div class="left">
+      <div class="logoMark"></div>
+      <div class="meta">
+        <b>Stripe Connect</b>
+        <span>Secure onboarding (hosted by Stripe)</span>
+      </div>
+    </div>
+    <div class="chip">Redirect</div>
+  </div>
 
-        <h3>Choose your funding options</h3>
+  <div class="content">
+    <div class="center">
+      <div class="card">
+        <h3>Set up payouts</h3>
+        <div class="muted">
+          This step happens on Stripe’s site. You’ll provide bank details, verify identity, and confirm tax info.
+        </div>
 
-        <div class="toggleRow" style="margin-top:10px;">
+        <div class="list" style="margin-top:12px;">
+          <div class="item"><b>Business type</b><div class="muted">Individual / Company</div></div>
+          <div class="item"><b>Identity verification</b><div class="muted">Legal name + DOB (and sometimes ID)</div></div>
+          <div class="item"><b>Payouts</b><div class="muted">Bank account to receive funds</div></div>
+          <div class="item"><b>Tax</b><div class="muted">Region-specific forms as needed</div></div>
+        </div>
+
+        <div class="btnRow" style="margin-top:14px;">
+          <button class="cta" data-jump="s13b">Complete Stripe setup</button>
+          <button class="ghostBtn" data-jump="s13">Cancel</button>
+        </div>
+
+        <div class="note" style="margin-top:12px;">
+          In the real product this is a secure Stripe page and returns you to Commons when finished.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- #13b Funding enabled -->
+<section id="s13b" class="hidden">
+  <div class="topbar">
+    <div class="left">
+      <div class="logoMark"></div>
+      <div class="meta">
+        <b>Funding is enabled ✅</b>
+        <span>Choose what your community can support</span>
+      </div>
+    </div>
+    <div class="chip">Payouts ready</div>
+  </div>
+
+  <div class="content">
+    <div class="center">
+      <div class="card">
+        <h3>Pick your funding options</h3>
+        <div class="muted">Turn these on now, tweak later anytime.</div>
+
+        <div class="toggleRow" style="margin-top:12px;">
           <div>
             <b>Supporter memberships</b>
-            <div class="muted">Offer monthly support tiers</div>
+            <div class="muted">Monthly support tiers</div>
           </div>
           <div class="switch" aria-hidden="true"></div>
         </div>
@@ -1700,24 +1765,14 @@ New post is up. Two questions for readers:
           <div class="switch" aria-hidden="true"></div>
         </div>
 
-        <div class="divider"></div>
-
-        <h3>Optional presets</h3>
-        <div class="pillRow">
-          <span class="pill">$3 tip</span>
-          <span class="pill">$5 tip</span>
-          <span class="pill">$10 tip</span>
+        <div class="note" style="margin-top:12px;">
+          Next, we’ll show a simple “Support” entry point you can pin or link from your welcome post.
         </div>
 
-        <div class="note" style="margin-top:14px;">
-          You can edit these later in Settings.
-        </div>
-
-        <div class="footerBar" style="margin-top:24px;">
-          <button class="ghostBtn" data-jump="s6">Back</button>
+        <div class="footerBar" style="margin-top:18px;">
+          <button class="secondary" data-jump="s7">Go to dashboard</button>
           <button class="primary" data-jump="s8">Continue</button>
         </div>
-
       </div>
     </div>
   </div>
